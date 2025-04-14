@@ -12,7 +12,7 @@ site_theme               : "default"
 title                    : "Md. Ayon Mia"
 title_separator          : "-"
 name                     : &name "Md. Ayon Mia"
-description              : &description "Academic portfolio of Md. Ayon Mia - NLP Researcher and Lecturer"
+description              : &description "personal description"
 url                      : https://Ayon128.github.io # the base hostname & protocol for your site e.g. "https://[your GitHub username].github.io"
 baseurl                  : "" # the subpath of your site, e.g. "/blog"
 repository               : "Ayon128/Ayon128.github.io"
@@ -27,7 +27,7 @@ author:
   pronouns         : "He/him"  
   bio              : "Lecturer, DIU & AI/ML Researcher"
   # location         : "Earth"
-  employer         : "Dhaka International University"
+  # employer         : "Dhaka International University"
   uri              : # URL
   email            : "mdayonrahman100@gmail.com" 
 
@@ -222,9 +222,9 @@ collections:
   portfolio:
     output: true
     permalink: /:collection/:path/
-  talks:
-    output: False
-    permalink: /:collection/:path/
+  # talks:
+  #   output: False
+  #   permalink: /:collection/:path/
 
 
 # These settings control how pages and collections are included in the site
