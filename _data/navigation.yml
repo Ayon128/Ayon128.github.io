@@ -16,8 +16,8 @@ main:
   - title: "Projects"  # Renamed from Talks
     url: /projects/
 
-  - title: "Teaching"
-    url: /teaching/    
+  - title: "Experience"
+    url: /experience/    
     
   # - title: "Portfolio"
   #   url: /portfolio/
