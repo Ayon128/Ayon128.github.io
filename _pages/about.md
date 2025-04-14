@@ -10,7 +10,6 @@ redirect_from:
 # Hello, I'm Md. Ayon Mia
 
 I am currently working as a Lecturer in the Department of Computer Science and Engineering at [Dhaka International University](https://diu.ac.bd/). I earned my B.Sc. degree in Computer Science and Engineering from Chittagong University of Engineering & Technology with a GPA of 3.83/4.00 (7th position).
-
 My research interests are primarily in Natural Language Processing (NLP), Large Language Models (LLMs), and Multimodal Learning. In the field of NLP, I focus on areas such as low-resource languages, code-mixed language translation, sentiment analysis, and text classification. I have extensive experience working with transformer-based models and have participated in various shared tasks focusing on cross-lingual applications. Additionally, I have also explored several important topics in Machine Learning (ML) and Deep Learning (DL) including feature fusion techniques, pooling strategies, and model optimization for low-resource settings.
 
 ## Recent News
@@ -67,25 +66,3 @@ My research interests are primarily in Natural Language Processing (NLP), Large 
 *BLP Workshop @ EMNLP* [[Paper]](https://aclanthology.org/2023.banglalp-1.39/)  
 *Authors - K Fatema, U Das, **Md. Ayon Mia**, MS Mowla, M Yahan, M.F. Ullah, A Sarker, H Murad*
 
-<!-- **7. Code-Mixed Language Translation: An Integrated Framework with Enhanced Preprocessing and N-gram Optimization for Cross-Lingual Communication**  
-[[Preprint]](https://arxiv.org/abs/XXXX.XXXXX)  
-*Authors - **Md. Ayon Mia**, M. Fahim, G.S.M. Mursalin, M.J.I. Basher, H. Murad, M.R. Islam, M.I. Khan, I.H. Sarker* -->
-<!-- Hello, I'm Md. Ayon Mia. I am currently working as a Lecturer at Dhaka International University and actively conducting research in Natural Language Processing, Machine Learning, and Deep Learning, with a particular focus on low-resource languages.
-
-I completed my B.Sc. in Computer Science and Engineering from Chittagong University of Engineering & Technology with a GPA of 3.83 (Honors, 7th position in my class).
-
-## Research Interests
-* Natural Language Processing (NLP)
-* Large Language Models (LLMs)
-* Multimodal Learning
-* Machine Learning (ML)
-* Deep Learning (DL)
-* Low Resource Language
-
-## Recent News
-* **November 2024**: Won 1st place at FakeDetect-Malayalam competition at DravidianLangTech-2025, NAACL 2025 🏆
-* **November 2024**: Won 2nd place at Political Multiclass Sentiment Analysis of Tamil X (Twitter) Comments at DravidianLangTech-2025, NAACL 2025 🥈
-* **November 2024**: Secured 6th place at Fake News Detection in Dravidian Languages at DravidianLangTech-2025, NAACL 2025
-* **September 2023**: Secured 5th place in Marathi Subtask at SemEval 2024 Task 1: Semantic Textual Relatedness (STR)
-* **December 2023**: Received Best Paper Award for "EmptyMind at BLP-2023 Task 1: A Transformer-based Hierarchical-BERT Model for Bangla Violence-Inciting Text Detection" 🏆
-* **July 2024**: Started position as Lecturer at Dhaka International University 🎓 -->
