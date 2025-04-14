@@ -1,16 +1,74 @@
 ---
 layout: archive
-title: "Projects"
+title: ""
 permalink: /projects/
 author_profile: true
 ---
 
-{% if site.talkmap_link == true %}
+{% include base_path %}
 
-<p style="text-decoration:underline;"><a href="/talkmap.html">See a map of all the places I've given a talk!</a></p>
+## CUET Hall Service
+*September 2023 - January 2024*
 
-{% endif %}
+A comprehensive hall management system designed to streamline services in university dormitories.
 
-{% for post in site.talks reversed %}
-  {% include archive-single-talk.html %}
-{% endfor %}
+- Architected three-panel system (Admin, Student, Service Provider) using Laravel for streamlined hall service management
+- Implemented comprehensive admin panel with user management and request approval workflow features
+- Developed student portal for service requests with priority levels and real-time status tracking notifications
+- Created service provider interface with task management and automated report generation capabilities
+
+**Technologies**: Laravel, MySQL, Bootstrap, CSS, PHP
+
+[Project Link](https://github.com/Ayon128/CUET_Hall_Service_System){:target="_blank"}
+
+## T20 Score Predictor
+*October 2022 - January 2023*
+
+A machine learning-based cricket score prediction system that forecasts team totals based on match statistics.
+
+- Built interactive web interface using Flask and implemented XGBoost regression model for cricket score predictions
+- Designed feature engineering pipeline to transform match data into predictive variables
+- Created user-friendly interface for real-time score forecasting during matches
+
+**Technologies**: Python, NumPy, Pandas, Matplotlib, XGBoost, Flask, HTML/CSS
+
+[Project Link](https://github.com/Ayon128/T20_Score_Prediction){:target="_blank"}
+
+## Fruit And Vegetable Recognition
+*October 2022 - January 2023*
+
+A CNN-based classification system that can identify various fruits and vegetables from images.
+
+- Implemented fine-tuned VGG-19 architecture achieving 94% classification accuracy across 136 classes
+- Developed robust image preprocessing pipeline for handling various lighting conditions and backgrounds
+- Optimized model parameters for improved performance and reduced computational requirements
+
+**Technologies**: Python, TensorFlow, VGG-19
+
+[Project Link](https://github.com/Ayon128/Fruit-and-vegetable-recognition){:target="_blank"}
+
+## NOKSHA: E-commerce Platform
+*May 2022 - September 2022*
+
+A full-stack e-commerce platform specializing in clothing and fashion products.
+
+- Built full-stack e-commerce platform with user authentication and profile management system
+- Implemented responsive product catalog with search, filtering and shopping cart features
+- Developed secure payment processing and order tracking functionality
+
+**Technologies**: MongoDB, Express.js, React.js, Node.js (MERN Stack)
+
+[Project Link](https://github.com/Ayon128/Noksha-1){:target="_blank"}
+
+## Electricity Billing System
+*January 2021 - February 2021*
+
+A utility management application for calculating and generating electricity bills.
+
+- Developed comprehensive billing calculation system based on tiered consumption rates
+- Created automated billing generation based on consumption data
+- Implemented user management for both administrators and customers
+
+**Technologies**: Java, Java Swing
+
+[Project Link](https://github.com/Ayon128/Electricity-Billing-System){:target="_blank"}
