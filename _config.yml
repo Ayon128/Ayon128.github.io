@@ -274,6 +274,15 @@ defaults:
       author_profile: true
       share: true
       comment: true
+  # Skills
+  - scope:
+      path: ""
+      type: skills
+    values:
+      layout: single
+      author_profile: true
+      share: true
+      comment: true
   # _talks
   - scope:
       path: ""
