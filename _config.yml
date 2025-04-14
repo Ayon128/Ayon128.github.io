@@ -220,11 +220,11 @@ collections:
     output: true
     permalink: /:collection/:path/
   portfolio:
-    output: true
+    output: false
     permalink: /:collection/:path/
-  # talks:
-  #   output: False
-  #   permalink: /:collection/:path/
+  projects:
+    output: false
+    permalink: /:collection/:path/
 
 
 # These settings control how pages and collections are included in the site
@@ -277,7 +277,7 @@ defaults:
   # _talks
   - scope:
       path: ""
-      type: talks
+      type: projects  
     values:
       layout: talk
       author_profile: true
