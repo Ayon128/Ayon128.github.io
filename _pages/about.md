@@ -46,7 +46,7 @@ My research interests are primarily in Natural Language Processing (NLP), Large 
 *Decision: Accept (Poster) - February 28, 2025*
 
 **2. KCRL@DravidianLangTech 2025: Multi-Pooling Feature Fusion with XLM-RoBERTa for Malayalam Fake News Detection and Classification**  
-*DravidianLangTech Workshop @ NAACL 2025* [[Paper]] (https://aclanthology.org/2025.dravidianlangtech-1.107/) 
+*DravidianLangTech Workshop @ NAACL 2025* [[Paper]](https://aclanthology.org/2025.dravidianlangtech-1.107/) 
 *Authors - Fariha Haq, Md. Tanvir Ahammed Shawon, **Md Ayon Mia**, Golam Sarwar Md. Mursalin, Muhammad Ibrahim Khan*  
 *Decision: Accept (Poster) - February 28, 2025*
 
