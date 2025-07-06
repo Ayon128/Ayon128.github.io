@@ -13,6 +13,8 @@ I am currently working as a Lecturer in the Department of Computer Science and E
 My research interests are primarily in Natural Language Processing (NLP), Large Language Models (LLMs), and Multimodal Learning. In the field of NLP, I focus on areas such as low-resource languages, code-mixed language translation, sentiment analysis, and text classification. I have extensive experience working with transformer-based models and have participated in various shared tasks focusing on cross-lingual applications. Additionally, I have also explored several important topics in Machine Learning (ML) and Deep Learning (DL) including feature fusion techniques, pooling strategies, and model optimization for low-resource settings.
 
 ## Recent News
+ * **June 2025**: Paper published in The Journal of Engineering (JoE) — Enhanced Semantic Relatedness Prediction Using XLM‐RoBERTa and CNNs With K‐Fold Cross‐Validation 😍🎉
+
 * **March 2025**: Secured 5th place in UNLP 2025 Shared Task on Span Identification for Detecting Social Media Manipulation 🏅
   * Team: KCRL Rank list: [https://shorturl.at/Ytukc](https://shorturl.at/Ytukc)
 
@@ -40,23 +42,24 @@ My research interests are primarily in Natural Language Processing (NLP), Large 
 
 ## Selected Publications
 
-**1. KCRL@DravidianLangTech 2025: Multi-View Feature Fusion with XLM-R for Tamil Political Sentiment Analysis**  
+**1. Enhanced Semantic Relatedness Prediction Using XLM‐RoBERTa and CNNs With K‐Fold Cross‐Validation**  
+*The Journal of Engineering (JoE), Wiley & The Institution of Engineering and Technology* [[Paper]](https://ietresearch.onlinelibrary.wiley.com/doi/10.1049/tje2.70106)  
+*Authors - **Md Ayon Mia**, Fahim Shakil Tamim, Zaima Sartaj Taheri, Md. Alamin Talukder*  
+*Published: June 2025*
+
+**2. KCRL@DravidianLangTech 2025: Multi-View Feature Fusion with XLM-R for Tamil Political Sentiment Analysis**  
 *DravidianLangTech Workshop @ NAACL 2025* [[Paper]](https://aclanthology.org/2025.dravidianlangtech-1.108/)   
 *Authors - **Md Ayon Mia**, Fariha Haq, Md. Tanvir Ahammed Shawon, Golam Sarwar Md. Mursalin, Muhammad Ibrahim Khan*  
 *Decision: Accept (Poster) - February 28, 2025*
 
-**2. KCRL@DravidianLangTech 2025: Multi-Pooling Feature Fusion with XLM-RoBERTa for Malayalam Fake News Detection and Classification**  
+**3. KCRL@DravidianLangTech 2025: Multi-Pooling Feature Fusion with XLM-RoBERTa for Malayalam Fake News Detection and Classification**  
 *DravidianLangTech Workshop @ NAACL 2025* [[Paper]](https://aclanthology.org/2025.dravidianlangtech-1.107/) 
 *Authors - Fariha Haq, Md. Tanvir Ahammed Shawon, **Md Ayon Mia**, Golam Sarwar Md. Mursalin, Muhammad Ibrahim Khan*  
 *Decision: Accept (Poster) - February 28, 2025*
 
-**3. Golden_Duck at #SMM4H 2024: A Transformer-based Approach to Social Media Text Classification**  
+**4. Golden_Duck at #SMM4H 2024: A Transformer-based Approach to Social Media Text Classification**  
 *ACL 2024 - SMM4H Workshop* [[Paper]](https://aclanthology.org/2024.smm4h-1.7/)  
 *Authors - **Md. Ayon Mia**, M. Yahan, H. Murad, M.I. Khan*
-
-**4. Enhanced Semantic Relatedness Prediction using XLM-RoBERTa and CNNs with K-Fold Cross-Validation**  
-*ICDMIS* [[Preprint]](https://arxiv.org/abs/XXXX.XXXXX)  
-*Authors - **Md. Ayon Mia**, F.S. Tamim, Z.S. Taheri*
 
 **5. EmptyMind at BLP-2023 Task 1: A Transformer-based Hierarchical-BERT Model for Bangla Violence-Inciting Text Detection**  
 *BLP Workshop @ EMNLP [Best Paper Award]* [[Paper]](https://aclanthology.org/2023.banglalp-1.19/)  
