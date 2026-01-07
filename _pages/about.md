@@ -13,7 +13,7 @@ I am currently working as a Lecturer in the Department of Computer Science and E
 My research interests are primarily in Natural Language Processing (NLP), Large Language Models (LLMs), and Multimodal Learning. In the field of NLP, I focus on areas such as low-resource languages, code-mixed language translation, sentiment analysis, and text classification. I have extensive experience working with transformer-based models and have participated in various shared tasks focusing on cross-lingual applications. Additionally, I have also explored several important topics in Machine Learning (ML) and Deep Learning (DL) including feature fusion techniques, pooling strategies, and model optimization for low-resource settings.
 
 ## Recent News
-* ***January 2026**: BanCyB: A Hybrid Transformer–LSTM Framework for Explainable Multi-Label Cyberbullying Detection in Low-Resource Setting — Discover Applied Sciences (Accepted) 🚀📖
+* **January 2026**: BanCyB: A Hybrid Transformer–LSTM Framework for Explainable Multi-Label Cyberbullying Detection in Low-Resource Setting — Discover Applied Sciences (Accepted) 🚀📖
 
 * ***August 2025:** Paper accepted at EMNLP 2025 — BANMIME: Misogyny Detection with Metaphor Explanation on Bangla Memes* (Main Conference) 🚀📖
 
