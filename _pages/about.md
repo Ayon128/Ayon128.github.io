@@ -13,6 +13,8 @@ I am currently working as a Lecturer in the Department of Computer Science and E
 My research interests are primarily in Natural Language Processing (NLP), Large Language Models (LLMs), and Multimodal Learning. In the field of NLP, I focus on areas such as low-resource languages, code-mixed language translation, sentiment analysis, and text classification. I have extensive experience working with transformer-based models and have participated in various shared tasks focusing on cross-lingual applications. Additionally, I have also explored several important topics in Machine Learning (ML) and Deep Learning (DL) including feature fusion techniques, pooling strategies, and model optimization for low-resource settings.
 
 ## Recent News
+* ***January 2026**: BanCyB: A Hybrid Transformer–LSTM Framework for Explainable Multi-Label Cyberbullying Detection in Low-Resource Setting — Discover Applied Sciences (Accepted) 🚀📖
+
 * ***August 2025:** Paper accepted at EMNLP 2025 — BANMIME: Misogyny Detection with Metaphor Explanation on Bangla Memes* (Main Conference) 🚀📖
 
  * **June 2025**: Paper published in The Journal of Engineering (JoE) — Enhanced Semantic Relatedness Prediction Using XLM‐RoBERTa and CNNs With K‐Fold Cross‐Validation 😍🎉
@@ -45,9 +47,9 @@ My research interests are primarily in Natural Language Processing (NLP), Large 
 ## Selected Publications
 
 **1. BANMIME: Misogyny Detection with Metaphor Explanation on Bangla Memes**  
-*Proceedings of the 2025 Conference on Empirical Methods in Natural Language Processing (EMNLP 2025), Main Conference* [[Preprint]](https://drive.google.com/file/d/1u3Xu_aePu6q9Xs3YPqXJcIHzyF7fN74O/view?usp=drive_link)  
+*Proceedings of the 2025 Conference on Empirical Methods in Natural Language Processing (EMNLP 2025), Main Conference* [[Paper]](https://aclanthology.org/2025.emnlp-main.900/)  
 *Authors -  **Md. Ayon Mia**, A.M.R. Mazumder, K.S. Sayma, M. Fahim, M.T.H. Fuad, A.M.M. Rahman, M.I. Khan*  
-*Accepted: August 2025*
+*Published: November 2025*
 
 **2. Enhanced Semantic Relatedness Prediction Using XLM‐RoBERTa and CNNs With K‐Fold Cross‐Validation**  
 *The Journal of Engineering (JoE), Wiley & The Institution of Engineering and Technology* [[Paper]](https://ietresearch.onlinelibrary.wiley.com/doi/10.1049/tje2.70106)  
