@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="description" content="Publications of Md. Ayon Mia."/>
+  <title>Publications — Md. Ayon Mia</title>
+  <script>
+    (function(){
+      const t = localStorage.getItem('theme');
+      if (t === 'dark' || (!t && window.matchMedia('(prefers-color-scheme: dark)').matches))
+        document.documentElement.classList.add('dark');
+    })();
+  </script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>tailwind.config = { darkMode: 'class' }</script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="assets/css/style.css"/>
+  <style>
+    .pub-card .btn-primary,
+    .pub-card .btn-github {
+      min-height: 30px;
+      display: inline-flex;
+      align-items: center;
+      vertical-align: middle;
+      line-height: 1;
+    }
+
+    .btn-github {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: 6px 14px;
+      border-radius: 0.5rem;
+      background: #1e293b;
+      color: #fff;
+      text-decoration: none;
+      transition: background 0.15s;
+    }
+    .btn-primary + .btn-github { margin-left: 0.5rem; }
+    .btn-github:hover { background: #334155; }
+    .dark .btn-github { background: #334155; }
+    .dark .btn-github:hover { background: #475569; }
+  </style>
+</head>
+<body class="bg-slate-50 dark:bg-slate-950 text-slate-800 dark:text-slate-200 transition-colors duration-300">
+
+<nav id="navbar" class="sticky top-0 z-50 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md border-b border-slate-100 dark:border-slate-800 transition-all duration-300">
+  <div class="max-w-5xl mx-auto px-4 sm:px-6 flex items-center justify-between h-14">
+    <a href="index.html" class="font-bold text-base text-indigo-600 dark:text-indigo-400 tracking-tight hover:opacity-80 transition-opacity shrink-0">Md. Ayon Mia</a>
+    <div class="hidden lg:flex items-center gap-5">
+      <a href="background.html" class="nav-link inline-flex items-center gap-1.5"><span>🎓</span><span>Background</span></a>
+      <a href="publications.html" class="nav-link active inline-flex items-center gap-1.5"><span>📑</span><span>Publications</span></a>
+      <a href="achievements.html" class="nav-link inline-flex items-center gap-1.5"><span>🏅</span><span>Achievements</span></a>
+      <a href="projects.html" class="nav-link inline-flex items-center gap-1.5"><span>🛠️</span><span>Projects</span></a>
+      <a href="notes/index.html" class="nav-link inline-flex items-center gap-1.5"><span>📝</span><span>Notes</span></a>
+    </div>
+    <div class="hidden lg:flex items-center gap-3">
+      <button data-dark-toggle class="dark-toggle" aria-label="Toggle dark mode"></button>
+    </div>
+    <div class="flex lg:hidden items-center gap-3">
+      <button data-dark-toggle class="dark-toggle" aria-label="Toggle dark mode"></button>
+      <button id="menuBtn" class="p-1.5 rounded-lg text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+      </button>
+    </div>
+  </div>
+  <div id="mobileMenu" class="hidden lg:hidden px-4 pb-3 space-y-1 bg-white dark:bg-slate-900 border-t border-slate-100 dark:border-slate-800">
+    <a href="background.html" class="block py-2 text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-indigo-600">🎓 Background</a>
+    <a href="publications.html" class="block py-2 text-sm font-medium text-indigo-600">📑 Publications</a>
+    <a href="achievements.html" class="block py-2 text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-indigo-600">🏅 Achievements</a>
+    <a href="projects.html" class="block py-2 text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-indigo-600">🛠️ Projects</a>
+    <a href="notes/index.html" class="block py-2 text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-indigo-600">📝 Notes</a>
+  </div>
+</nav>
+
+<section class="max-w-5xl mx-auto px-4 sm:px-6 py-20">
+  <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-3 mb-8 fade-up">
+    <h1 class="section-title mb-0" style="margin-bottom:0">📑 Publications</h1>
+    <a href="https://scholar.google.com/citations?user=kfmoYAkAAAAJ&hl=en&authuser=1" target="_blank" class="text-sm font-semibold text-indigo-600 dark:text-indigo-400 hover:underline flex items-center gap-1 shrink-0">
+      <span>🔗</span><span>Full list on Google Scholar -></span>
+    </a>
+  </div>
+
+  <div class="fade-up mb-8">
+    <div class="flex items-center gap-3 mb-4"><span class="text-sm sm:text-base font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest flex items-center gap-2"><span>🗓️</span><span>2026</span></span><div class="flex-1 h-px bg-slate-200 dark:bg-slate-700"></div></div>
+    <div class="card pub-card">
+      <div class="flex flex-wrap gap-2 mb-2"><span class="badge badge-journal">Journal · Springer</span></div>
+      <h3 class="text-base sm:text-lg font-semibold text-slate-800 dark:text-slate-100 leading-snug mb-1">BanCyB: A Hybrid Transformer-LSTM Framework for Explainable Multi-Label Cyberbullying Detection in Low-Resource Setting</h3>
+      <p class="text-sm sm:text-base text-slate-500 dark:text-slate-400 mb-1">M.M. Hasan, M.S. Arefin, <span class="author-highlight">Md. Ayon Mia</span>, P.K. Dhar</p>
+      <p class="text-sm text-slate-400 dark:text-slate-500 italic mb-3">Discover Applied Sciences (Springer) — March 2026</p>
+      <a href="https://link.springer.com/article/10.1007/s42452-026-08238-4" target="_blank" class="btn-primary">Paper</a><a href="https://github.com/mynul11/BanCyB" target="_blank" class="btn-github"><svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0C5.374 0 0 5.373 0 12c0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0112 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"/></svg></a>
+    </div>
+    <div class="card pub-card mt-3">
+      <div class="flex flex-wrap gap-2 mb-2"><span class="badge badge-acl">ICSADL 2026</span></div>
+      <h3 class="text-base sm:text-lg font-semibold text-slate-800 dark:text-slate-100 leading-snug mb-1">BanINT: A Bengali Dataset for Multiclass Intent Classification with BanglaSeqNet</h3>
+      <p class="text-sm sm:text-base text-slate-500 dark:text-slate-400 mb-1">Md. Tanvir Ahammed Shawon, Fariha Haq, <span class="author-highlight">Md. Ayon Mia</span>, Muhammad Ibrahim Khan, Mohammad Shamsul Arefin, M. M. Musharaf Hussain</p>
+      <p class="text-sm text-slate-400 dark:text-slate-500 italic">5th International Conference on Sentiment Analysis and Deep Learning (ICSADL 2026) — Accepted</p>
+    </div>
+  </div>
+
+  <div class="fade-up mb-8">
+    <div class="flex items-center gap-3 mb-4"><span class="text-sm sm:text-base font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest flex items-center gap-2"><span>🗓️</span><span>2025</span></span><div class="flex-1 h-px bg-slate-200 dark:bg-slate-700"></div></div>
+    <div class="space-y-3">
+      <div class="card pub-card"><div class="flex flex-wrap gap-2 mb-2"><span class="badge badge-emnlp">BLP Workshop · 2025</span></div><h3 class="text-base sm:text-lg font-semibold text-slate-800 dark:text-slate-100 leading-snug mb-1">BANHATEME: Understanding Hate in Bangla Memes through Detection, Categorization, and Target Profiling</h3><p class="text-sm sm:text-base text-slate-500 dark:text-slate-400 mb-1"><span class="author-highlight">Md. Ayon Mia</span>, M. Fahim</p><p class="text-sm text-slate-400 dark:text-slate-500 italic mb-3">BLP 2025 Workshop, co-located with IJCNLP-AACL — December 2025</p><a href="https://aclanthology.org/2025.banglalp-1.15/" target="_blank" class="btn-primary">Paper</a><a href="https://github.com/Ayon128/BanHateMe" target="_blank" class="btn-github"><svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0C5.374 0 0 5.373 0 12c0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0112 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"/></svg></a></div>
+      <div class="card pub-card"><div class="flex flex-wrap gap-2 mb-2"><span class="badge badge-emnlp">EMNLP Main · 2025</span></div><h3 class="text-base sm:text-lg font-semibold text-slate-800 dark:text-slate-100 leading-snug mb-1">BANMIME: Misogyny Detection with Metaphor Explanation on Bangla Memes</h3><p class="text-sm sm:text-base text-slate-500 dark:text-slate-400 mb-1"><span class="author-highlight">Md. Ayon Mia</span>, A.M.R. Mazumder, K.S. Sayma, M. Fahim, M.T.H. Fuad, A.M.M. Rahman, M.I. Khan</p><p class="text-sm text-slate-400 dark:text-slate-500 italic mb-3">EMNLP 2025 Main Conference — November 2025</p><a href="https://aclanthology.org/2025.emnlp-main.900/" target="_blank" class="btn-primary">Paper</a><a href="https://github.com/Ayon128/BANMIME" target="_blank" class="btn-github"><svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0C5.374 0 0 5.373 0 12c0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0112 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"/></svg></a></div>
+      <div class="card pub-card"><div class="flex flex-wrap gap-2 mb-2"><span class="badge badge-journal">Journal · Wiley</span></div><h3 class="text-base sm:text-lg font-semibold text-slate-800 dark:text-slate-100 leading-snug mb-1">Enhanced Semantic Relatedness Prediction Using XLM-RoBERTa and CNNs With K-Fold Cross-Validation</h3><p class="text-sm sm:text-base text-slate-500 dark:text-slate-400 mb-1"><span class="author-highlight">Md. Ayon Mia</span>, Fahim Shakil Tamim, Zaima Sartaj Taheri, Md. Alamin Talukder</p><p class="text-sm text-slate-400 dark:text-slate-500 italic mb-3">The Journal of Engineering (JoE), Wiley &amp; IET — June 2025</p><a href="https://ietresearch.onlinelibrary.wiley.com/doi/10.1049/tje2.70106" target="_blank" class="btn-primary">Paper</a><a href="https://github.com/Ayon128/Semantic_Relatedness" target="_blank" class="btn-github"><svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0C5.374 0 0 5.373 0 12c0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0112 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"/></svg></a></div>
+      <div class="card pub-card"><div class="flex flex-wrap gap-2 mb-2"><span class="badge badge-acl">ICCIT 2025</span></div><h3 class="text-base sm:text-lg font-semibold text-slate-800 dark:text-slate-100 leading-snug mb-1">Prompting vs Fine-Tuning for Bengali Violence Detection in Low-Resource Settings</h3><p class="text-sm sm:text-base text-slate-500 dark:text-slate-400 mb-1"><span class="author-highlight">Md. Ayon Mia</span>, A. Hasan, A. Rahman, G.S.M. Mursalin, M.I. Khan</p><p class="text-sm text-slate-400 dark:text-slate-500 italic">28th International Conference on Computer and Information Technology (ICCIT 2025) — Accepted</p></div>
+      <div class="card pub-card"><div class="flex flex-wrap gap-2 mb-2"><span class="badge badge-acl">ICCIT 2025</span></div><h3 class="text-sm font-semibold text-slate-800 dark:text-slate-100 leading-snug mb-1">SETBoost: An Interpretable Machine Learning Approach for Predicting Software Employee Turnover Tendency</h3><p class="text-xs text-slate-500 dark:text-slate-400 mb-1">A. Rahman, M.I. Hossain, <span class="author-highlight">Md. Ayon Mia</span>, M.I. Khan</p><p class="text-xs text-slate-400 dark:text-slate-500 italic">28th International Conference on Computer and Information Technology (ICCIT 2025) — Accepted</p></div>
+      <div class="card pub-card"><div class="flex flex-wrap gap-2 mb-2"><span class="badge badge-acl">BIM 2025</span></div><h3 class="text-sm font-semibold text-slate-800 dark:text-slate-100 leading-snug mb-1">Vision Transformers for Multi-Class Eye Disease Classification: Enhancing Early Detection in Resource-Constrained Healthcare Settings</h3><p class="text-xs text-slate-500 dark:text-slate-400 mb-1">A. Rahman, M. Hasan, <span class="author-highlight">Md. Ayon Mia</span>, M.I. Khan</p><p class="text-xs text-slate-400 dark:text-slate-500 italic mb-3">3rd International Conference on Big Data, IoT and Machine Learning (BIM 2025)</p><a href="https://link.springer.com/chapter/10.1007/978-3-032-15346-3_26" target="_blank" class="btn-primary">Paper</a></div>
+      <div class="card pub-card"><div class="flex flex-wrap gap-2 mb-2"><span class="badge badge-acl">BIM 2025</span></div><h3 class="text-sm font-semibold text-slate-800 dark:text-slate-100 leading-snug mb-1">Fraud Detection with DistilBERT: A Transformer-Based Approach to Behavioral Banking Sequences</h3><p class="text-xs text-slate-500 dark:text-slate-400 mb-1">M.M. Hasan, A.A. Mahin, S. Chakraborty, M. Afrose, <span class="author-highlight">Md. Ayon Mia</span>, M.A. Based</p><p class="text-xs text-slate-400 dark:text-slate-500 italic">3rd International Conference on Big Data, IoT and Machine Learning (BIM 2025) — Accepted</p></div>
+      <div class="card pub-card"><div class="flex flex-wrap gap-2 mb-2"><span class="badge badge-acl">IDAA 2025</span></div><h3 class="text-sm font-semibold text-slate-800 dark:text-slate-100 leading-snug mb-1">Explainable Self-Attentive Transformer Model for Bangla Mental Health Disorder Detection</h3><p class="text-xs text-slate-500 dark:text-slate-400 mb-1">A.S.H. Hridoy, N.S. Shohan, M.S. Alif, N.M.A. Mahin, <span class="author-highlight">Md. Ayon Mia</span></p><p class="text-xs text-slate-400 dark:text-slate-500 italic">International Conference on Intelligent Data Analysis and Applications (IDAA 2025) — Accepted</p></div>
+      <div class="card pub-card"><div class="flex flex-wrap gap-2 mb-2"><span class="badge badge-naacl">NAACL Workshop · 2025</span></div><h3 class="text-sm font-semibold text-slate-800 dark:text-slate-100 leading-snug mb-1">KCRL@DravidianLangTech 2025: Multi-View Feature Fusion with XLM-R for Tamil Political Sentiment Analysis</h3><p class="text-xs text-slate-500 dark:text-slate-400 mb-1"><span class="author-highlight">Md. Ayon Mia</span>, Fariha Haq, Md. Tanvir Ahammed Shawon, Golam Sarwar Md. Mursalin, Muhammad Ibrahim Khan</p><p class="text-xs text-slate-400 dark:text-slate-500 italic mb-3">DravidianLangTech Workshop @ NAACL 2025</p><a href="https://aclanthology.org/2025.dravidianlangtech-1.108/" target="_blank" class="btn-primary">Paper</a><a href="https://github.com/Ayon128/Shared-Task" target="_blank" class="btn-github"><svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0C5.374 0 0 5.373 0 12c0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0112 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"/></svg></a></div>
+      <div class="card pub-card"><div class="flex flex-wrap gap-2 mb-2"><span class="badge badge-naacl">NAACL Workshop · 2025</span></div><h3 class="text-sm font-semibold text-slate-800 dark:text-slate-100 leading-snug mb-1">KCRL@DravidianLangTech 2025: Multi-Pooling Feature Fusion with XLM-RoBERTa for Malayalam Fake News Detection and Classification</h3><p class="text-xs text-slate-500 dark:text-slate-400 mb-1">Fariha Haq, Md. Tanvir Ahammed Shawon, <span class="author-highlight">Md. Ayon Mia</span>, Golam Sarwar Md. Mursalin, Muhammad Ibrahim Khan</p><p class="text-xs text-slate-400 dark:text-slate-500 italic mb-3">DravidianLangTech Workshop @ NAACL 2025</p><a href="https://aclanthology.org/2025.dravidianlangtech-1.107/" target="_blank" class="btn-primary">Paper</a><a href="https://github.com/Ayon128/Shared-Task" target="_blank" class="btn-github"><svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0C5.374 0 0 5.373 0 12c0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0112 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"/></svg></a></div>
+      <div class="card pub-card"><div class="flex flex-wrap gap-2 mb-2"><span class="badge badge-naacl">CASE Workshop · 2025</span></div><h3 class="text-sm font-semibold text-slate-800 dark:text-slate-100 leading-snug mb-1">ID4Fusion@CASE 2025: A Multimodal Approach to Hate Speech Detection in Text-Embedded Memes Using Ensemble Transformer-Based Approach</h3><p class="text-xs text-slate-500 dark:text-slate-400 mb-1">T.B. Rashfi, M.T.A. Shawon, <span class="author-highlight">Md. Ayon Mia</span>, M.I. Khan</p><p class="text-xs text-slate-400 dark:text-slate-500 italic mb-3">8th Workshop on CASE </p><a href="https://aclanthology.org/2025.case-1.17/" target="_blank" class="btn-primary">Paper</a></div>
+      <div class="card pub-card"><div class="flex flex-wrap gap-2 mb-2"><span class="badge badge-naacl">CASE Workshop · 2025</span></div><h3 class="text-sm font-semibold text-slate-800 dark:text-slate-100 leading-snug mb-1">PhantomTroupe@CASE 2025: Multimodal Hate Speech Detection in Text-Embedded Memes using Instruction-Tuned LLMs</h3><p class="text-xs text-slate-500 dark:text-slate-400 mb-1">Amin, M.A. Horaira, M.T.A. Shawon, <span class="author-highlight">Md. Ayon Mia</span>, M.I. Khan</p><p class="text-xs text-slate-400 dark:text-slate-500 italic mb-3">8th Workshop on CASE </p><a href="https://aclanthology.org/2025.case-1.16/" target="_blank" class="btn-primary">Paper</a></div>
+      <div class="card pub-card"><div class="flex flex-wrap gap-2 mb-2"><span class="badge badge-naacl">CASE Workshop · 2025</span></div><h3 class="text-sm font-semibold text-slate-800 dark:text-slate-100 leading-snug mb-1">CUET NOOB@CASE 2025: Multimodal Hate Speech Detection in Text-Embedded Memes using Late Fusion with Attention Mechanism</h3><p class="text-xs text-slate-500 dark:text-slate-400 mb-1">M.T.A. Shawon, <span class="author-highlight">Md. Ayon Mia</span>, M.I. Khan</p><p class="text-xs text-slate-400 dark:text-slate-500 italic mb-3">8th Workshop on CASE </p><a href="https://aclanthology.org/2025.case-1.19/" target="_blank" class="btn-primary">Paper</a></div>
+      <div class="card pub-card"><div class="flex flex-wrap gap-2 mb-2"><span class="badge badge-acl">CLEF 2025</span></div><h3 class="text-sm font-semibold text-slate-800 dark:text-slate-100 leading-snug mb-1">CUET_KCRLatCheckThat!2025: EnsembleNet with RoBERTa-Large for Subjectivity Detection in News Articles</h3><p class="text-xs text-slate-500 dark:text-slate-400 mb-1">M.T.A. Shawon, F. Haq, <span class="author-highlight">Md. Ayon Mia</span>, G.S.M. Mursalin, M.I. Khan</p><p class="text-xs text-slate-400 dark:text-slate-500 italic mb-3">CLEF 2025 Conference and Labs of the Evaluation Forum</p><a href="https://ceur-ws.org/Vol-4038/paper_96.pdf" target="_blank" class="btn-primary">Paper</a></div>
+    </div>
+  </div>
+
+  <div class="fade-up mb-8">
+    <div class="flex items-center gap-3 mb-4"><span class="text-sm sm:text-base font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest flex items-center gap-2"><span>🗓️</span><span>2024</span></span><div class="flex-1 h-px bg-slate-200 dark:bg-slate-700"></div></div>
+    <div class="card pub-card"><div class="flex flex-wrap gap-2 mb-2"><span class="badge badge-acl">ACL Workshop · 2024</span></div><h3 class="text-base sm:text-lg font-semibold text-slate-800 dark:text-slate-100 leading-snug mb-1">Golden_Duck at #SMM4H 2024: A Transformer-based Approach to Social Media Text Classification</h3><p class="text-sm sm:text-base text-slate-500 dark:text-slate-400 mb-1"><span class="author-highlight">Md. Ayon Mia</span>, M. Yahan, H. Murad, M.I. Khan</p><p class="text-sm text-slate-400 dark:text-slate-500 italic mb-3">SMM4H Workshop @ ACL 2024</p><a href="https://aclanthology.org/2024.smm4h-1.7/" target="_blank" class="btn-primary">Paper</a></div>
+  </div>
+
+  <div class="fade-up mb-10">
+    <div class="flex items-center gap-3 mb-4"><span class="text-sm sm:text-base font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest flex items-center gap-2"><span>🗓️</span><span>2023</span></span><div class="flex-1 h-px bg-slate-200 dark:bg-slate-700"></div></div>
+    <div class="space-y-3">
+      <div class="card pub-card"><div class="flex flex-wrap gap-2 mb-2"><span class="badge badge-emnlp">EMNLP Workshop · 2023</span><span class="badge badge-award">🏆 Best Paper</span></div><h3 class="text-base sm:text-lg font-semibold text-slate-800 dark:text-slate-100 leading-snug mb-1">EmptyMind at BLP-2023 Task 1: A Transformer-based Hierarchical-BERT Model for Bangla Violence-Inciting Text Detection</h3><p class="text-sm sm:text-base text-slate-500 dark:text-slate-400 mb-1">U. Das, K. Fatema, <span class="author-highlight">Md. Ayon Mia</span>, M. Yahan, MS. Mowla, MDF. Ullah, A. Sarker, H. Murad</p><p class="text-sm text-slate-400 dark:text-slate-500 italic mb-3">BLP Workshop @ EMNLP 2023</p><a href="https://aclanthology.org/2023.banglalp-1.19/" target="_blank" class="btn-primary">Paper</a><a href="https://github.com/ML-EmptyMind/blp-task1" target="_blank" class="btn-github"><svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0C5.374 0 0 5.373 0 12c0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0112 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"/></svg></a></div>
+      <div class="card pub-card"><div class="flex flex-wrap gap-2 mb-2"><span class="badge badge-emnlp">EMNLP Workshop · 2023</span></div><h3 class="text-base sm:text-lg font-semibold text-slate-800 dark:text-slate-100 leading-snug mb-1">EmptyMind at BLP-2023 Task 2: Sentiment Analysis of Bangla Social Media Posts using Transformer-Based Models</h3><p class="text-sm sm:text-base text-slate-500 dark:text-slate-400 mb-1">K. Fatema, U. Das, <span class="author-highlight">Md. Ayon Mia</span>, MS. Mowla, M. Yahan, MDF. Ullah, A. Sarker, H. Murad</p><p class="text-sm text-slate-400 dark:text-slate-500 italic mb-3">BLP Workshop @ EMNLP 2023</p><a href="https://aclanthology.org/2023.banglalp-1.39/" target="_blank" class="btn-primary">Paper</a><a href="https://github.com/ML-EmptyMind/blp-task2" target="_blank" class="btn-github"><svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0C5.374 0 0 5.373 0 12c0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0112 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"/></svg></a></div>
+    </div>
+  </div>
+
+  <!-- Under Review section (hidden until published)
+  <div class="fade-up">
+    <div class="flex items-center gap-3 mb-4"><span class="text-sm sm:text-base font-bold text-amber-500 uppercase tracking-widest flex items-center gap-2"><span>📝</span><span>Under Review</span></span><div class="flex-1 h-px bg-amber-200 dark:bg-amber-900"></div></div>
+    <div class="space-y-3">
+      <div class="card pub-card" style="border-style:dashed"><div class="flex flex-wrap gap-2 mb-2"><span class="badge" style="background:#fffbeb;color:#92400e;border-color:#fde68a">Journal · Elsevier</span></div><h3 class="text-base sm:text-lg font-semibold text-slate-800 dark:text-slate-100 leading-snug mb-1">Code-Mixed Language Translation: An Integrated Framework with Enhanced Preprocessing and N-gram Optimization for Cross-Lingual Communication</h3><p class="text-sm sm:text-base text-slate-500 dark:text-slate-400 mb-1"><span class="author-highlight">Md. Ayon Mia</span>, M. Fahim, G.S.M. Mursalin, M.J.I. Basher, H. Murad, M.R. Islam, M.I. Khan, I.H. Sarker</p><p class="text-sm text-slate-400 dark:text-slate-500 italic">Engineering Applications of Artificial Intelligence (Elsevier) — Under Review</p></div>
+      <div class="card pub-card" style="border-style:dashed"><div class="flex flex-wrap gap-2 mb-2"><span class="badge" style="background:#fffbeb;color:#92400e;border-color:#fde68a">Journal · Springer</span></div><h3 class="text-base sm:text-lg font-semibold text-slate-800 dark:text-slate-100 leading-snug mb-1">BanGRev: A Novel Bengali Tech Gadget Review Corpus Utilizing Triple-Pooling Feature Fusion with Explainable AI</h3><p class="text-sm sm:text-base text-slate-500 dark:text-slate-400 mb-1"><span class="author-highlight">Md. Ayon Mia</span>, A. Rahman, G.S.M. Mursalin, M.I. Khan, I.H. Sarker</p><p class="text-sm text-slate-400 dark:text-slate-500 italic">New Generation Computing (Springer) — Under Review</p></div>
+      <div class="card pub-card" style="border-style:dashed"><div class="flex flex-wrap gap-2 mb-2"><span class="badge" style="background:#fffbeb;color:#92400e;border-color:#fde68a">Journal · Springer</span></div><h3 class="text-base sm:text-lg font-semibold text-slate-800 dark:text-slate-100 leading-snug mb-1">Addressing Rating-Review Discrepancy in a Novel Dataset: An Explainable Pharmaceutical Product Evaluation using Multi-Stream Attention Transformer</h3><p class="text-sm sm:text-base text-slate-500 dark:text-slate-400 mb-1">A. Rahman, <span class="author-highlight">Md. Ayon Mia</span>, M.I. Khan, I.H. Sarker</p><p class="text-sm text-slate-400 dark:text-slate-500 italic">Neural Computing and Applications (Springer) — Under Review</p></div>
+    </div>
+  </div>
+  -->
+</section>
+
+<footer class="bg-slate-50 dark:bg-slate-950">
+  <div class="max-w-5xl mx-auto px-4 sm:px-6 py-8 flex flex-col sm:flex-row items-center justify-between gap-3">
+    <p class="text-xs text-slate-400">© 2026 Md. Ayon Mia. All rights reserved.</p>
+    <div class="flex gap-4">
+      <a href="mailto:mdayon.cse@gmail.com" class="text-xs text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">mdayon.cse@gmail.com</a>
+      <a href="https://github.com/Ayon128" target="_blank" class="text-xs text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors inline-flex items-center" aria-label="GitHub" title="GitHub"><svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0C5.374 0 0 5.373 0 12c0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0112 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"/></svg></a>
+      <a href="https://scholar.google.com/citations?user=kfmoYAkAAAAJ" target="_blank" class="text-xs text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">Google Scholar</a>
+    </div>
+  </div>
+</footer>
+
+<script src="assets/js/main.js"></script>
+</body>
+</html>

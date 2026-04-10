@@ -1,0 +1,7 @@
+# Reduce non-site language noise in GitHub language stats
+*.ipynb linguist-detectable=false
+*.py linguist-detectable=false
+*.scss linguist-detectable=false
+
+# Treat docs as documentation
+*.md linguist-documentation=true

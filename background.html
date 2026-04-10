@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="description" content="Background of Md. Ayon Mia — education, experience, leadership, and skills."/>
+  <title>Background — Md. Ayon Mia</title>
+  <script>
+    (function(){
+      const t = localStorage.getItem('theme');
+      if (t === 'dark' || (!t && window.matchMedia('(prefers-color-scheme: dark)').matches))
+        document.documentElement.classList.add('dark');
+    })();
+  </script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>tailwind.config = { darkMode: 'class' }</script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="assets/css/style.css"/>
+</head>
+<body class="bg-slate-50 dark:bg-slate-950 text-slate-800 dark:text-slate-200 transition-colors duration-300">
+
+<nav id="navbar" class="sticky top-0 z-50 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md border-b border-slate-100 dark:border-slate-800 transition-all duration-300">
+  <div class="max-w-5xl mx-auto px-4 sm:px-6 flex items-center justify-between h-14">
+    <a href="index.html" class="font-bold text-base text-indigo-600 dark:text-indigo-400 tracking-tight hover:opacity-80 transition-opacity shrink-0">Md. Ayon Mia</a>
+    <div class="hidden lg:flex items-center gap-5">
+      <a href="background.html" class="nav-link active inline-flex items-center gap-1.5"><span>🎓</span><span>Background</span></a>
+      <a href="publications.html" class="nav-link inline-flex items-center gap-1.5"><span>📑</span><span>Publications</span></a>
+      <a href="achievements.html" class="nav-link inline-flex items-center gap-1.5"><span>🏅</span><span>Achievements</span></a>
+      <a href="projects.html" class="nav-link inline-flex items-center gap-1.5"><span>🛠️</span><span>Projects</span></a>
+      <a href="notes/index.html" class="nav-link inline-flex items-center gap-1.5"><span>📝</span><span>Notes</span></a>
+    </div>
+    <div class="hidden lg:flex items-center gap-3">
+      <button data-dark-toggle class="dark-toggle" aria-label="Toggle dark mode"></button>
+    </div>
+    <div class="flex lg:hidden items-center gap-3">
+      <button data-dark-toggle class="dark-toggle" aria-label="Toggle dark mode"></button>
+      <button id="menuBtn" class="p-1.5 rounded-lg text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+      </button>
+    </div>
+  </div>
+  <div id="mobileMenu" class="hidden lg:hidden px-4 pb-3 space-y-1 bg-white dark:bg-slate-900 border-t border-slate-100 dark:border-slate-800">
+    <a href="background.html" class="block py-2 text-sm font-medium text-indigo-600">🎓 Background</a>
+    <a href="publications.html" class="block py-2 text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-indigo-600">📑 Publications</a>
+    <a href="achievements.html" class="block py-2 text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-indigo-600">🏅 Achievements</a>
+    <a href="projects.html" class="block py-2 text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-indigo-600">🛠️ Projects</a>
+    <a href="notes/index.html" class="block py-2 text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-indigo-600">📝 Notes</a>
+  </div>
+</nav>
+
+<section class="bg-white dark:bg-slate-900 py-20">
+  <div class="max-w-5xl mx-auto px-4 sm:px-6">
+    <!-- <h1 class="section-title fade-up">📚 Background</h1> -->
+    <div class="grid lg:grid-cols-2 gap-12">
+      <div class="space-y-10">
+        <div class="fade-up">
+          <h2 class="text-base sm:text-lg font-bold text-teal-700 dark:text-teal-300 uppercase tracking-widest mb-4 flex items-center gap-2"><span>🎓</span><span>Education</span></h2>
+          <div class="card">
+            <div class="flex items-start justify-between gap-2">
+              <div>
+                <p class="text-base sm:text-lg font-semibold text-slate-800 dark:text-slate-100">B.Sc. in Computer Science &amp; Engineering</p>
+                  <p class="text-base sm:text-lg text-indigo-600 dark:text-indigo-400 font-medium mt-0.5">Chittagong University of Engineering &amp; Technology (CUET)</p>
+                <p class="text-xs text-slate-500 mt-0.5">Chittagong, Bangladesh</p>
+              </div>
+              <span class="shrink-0 text-xs text-slate-400">2019 - 2024</span>
+            </div>
+            <div class="flex flex-wrap gap-2 mt-3">
+              <span class="badge badge-journal">GPA: 3.83 / 4.00</span>
+              <span class="badge badge-emnlp">7th Position</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="fade-up">
+          <h2 class="text-base sm:text-lg font-bold text-teal-700 dark:text-teal-300 uppercase tracking-widest mb-4 flex items-center gap-2"><span>💼</span><span>Experience</span></h2>
+          <div>
+            <div class="exp-item">
+              <div class="card">
+                <div class="flex items-start justify-between gap-2">
+                  <div>
+                    <p class="text-base sm:text-lg font-semibold text-slate-800 dark:text-slate-100">Lecturer, Dept. of CSE</p>
+                    <p class="text-base sm:text-lg text-indigo-600 dark:text-indigo-400 font-medium mt-0.5">Southeast University</p>
+                    <p class="text-xs text-slate-500 mt-0.5">Dhaka, Bangladesh</p>
+                  </div>
+                  <span class="badge badge-emnlp shrink-0">Present</span>
+                </div>
+                <p class="text-xs text-slate-400 dark:text-slate-500 mt-2">Feb 2026 - Present</p>
+              </div>
+            </div>
+            <div class="exp-item">
+              <div class="card">
+                <div class="flex items-start justify-between gap-2">
+                  <div>
+                    <p class="text-base sm:text-lg font-semibold text-slate-800 dark:text-slate-100">Research Mentor</p>
+                    <p class="text-base sm:text-lg text-indigo-600 dark:text-indigo-400 font-medium mt-0.5">Khan Computational Research Lab (KCRL)</p>
+                  </div>
+                  <!-- <span class="badge badge-emnlp shrink-0">Present</span> -->
+                </div>
+                <p class="text-xs text-slate-400 dark:text-slate-500 mt-1">2024 - Present</p>
+                <ul class="mt-2 space-y-0.5">
+                  <li class="text-xs text-slate-500 dark:text-slate-400">• Mentor undergraduates in thesis research and academic writing</li>
+                  <li class="text-xs text-slate-500 dark:text-slate-400">• Guide research methodologies and technical implementations</li>
+                </ul>
+              </div>
+            </div>
+            <div class="exp-item">
+              <div class="card">
+                <p class="text-base sm:text-lg font-semibold text-slate-800 dark:text-slate-100">Lecturer, Dept. of CSE</p>
+                <p class="text-base sm:text-lg text-indigo-600 dark:text-indigo-400 font-medium mt-0.5">Dhaka International University</p>
+                <p class="text-xs text-slate-500 mt-0.5">Dhaka, Bangladesh</p>
+                <p class="text-xs text-slate-400 dark:text-slate-500 mt-1">Jul 2024 - Feb 2026</p>
+              </div>
+            </div>
+            <div class="exp-item">
+              <div class="card">
+                <p class="text-base sm:text-lg font-semibold text-slate-800 dark:text-slate-100">Software Engineer Intern</p>
+                <p class="text-base sm:text-lg text-indigo-600 dark:text-indigo-400 font-medium mt-0.5">Spectrum Engineering Consortium Ltd.</p>
+                <p class="text-xs text-slate-500 mt-0.5">Dhaka, Bangladesh</p>
+                <p class="text-xs text-slate-400 dark:text-slate-500 mt-1">Sep 2023 - Oct 2023</p>
+                <ul class="mt-2 space-y-0.5">
+                  <li class="text-xs text-slate-500 dark:text-slate-400">• Developed vehicle scheduling algorithm</li>
+                  <li class="text-xs text-slate-500 dark:text-slate-400">• Built backend server with database schema design</li>
+                  <li class="text-xs text-slate-500 dark:text-slate-400">• Implemented UI using MERN stack</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="fade-up">
+          <h2 class="text-base sm:text-lg font-bold text-teal-700 dark:text-teal-300 uppercase tracking-widest mb-4 flex items-center gap-2"><span>🤝</span><span>Volunteer &amp; Leadership</span></h2>
+          <div>
+            <div class="exp-item">
+              <div class="card">
+                <div class="flex items-start justify-between gap-2">
+                  <div>
+                    <p class="text-base sm:text-lg font-semibold text-slate-800 dark:text-slate-100">Adviser</p>
+                    <p class="text-base sm:text-lg text-indigo-600 dark:text-indigo-400 font-medium mt-0.5">DIU Computer Programming Club (CPC)</p>
+                  </div>
+                  <!-- <span class="badge badge-emnlp shrink-0">Present</span> -->
+                </div>
+                <p class="text-xs text-slate-400 dark:text-slate-500 mt-1">2024 - Feb 2026</p>
+                <ul class="mt-2 space-y-0.5">
+                  <li class="text-xs text-slate-500 dark:text-slate-400">• Guide students in organizing programming competitions and tech events</li>
+                  <li class="text-xs text-slate-500 dark:text-slate-400">• Mentor club members in programming and problem-solving skills</li>
+                </ul>
+              </div>
+            </div>
+            <div class="exp-item">
+              <div class="card">
+                <div class="flex items-start justify-between gap-2">
+                  <div>
+                    <p class="text-base sm:text-lg font-semibold text-slate-800 dark:text-slate-100">Adviser</p>
+                    <p class="text-base sm:text-lg text-indigo-600 dark:text-indigo-400 font-medium mt-0.5">DIU Film &amp; Photography Society</p>
+                  </div>
+                  <!-- <span class="badge badge-emnlp shrink-0">Present</span> -->
+                </div>
+                <p class="text-xs text-slate-400 dark:text-slate-500 mt-1">2024 - Feb 2026</p>
+                <ul class="mt-2 space-y-0.5">
+                  <li class="text-xs text-slate-500 dark:text-slate-400">• Guide students in organizing photography exhibitions and film festivals</li>
+                  <li class="text-xs text-slate-500 dark:text-slate-400">• Mentor club members in creative and technical skills</li>
+                </ul>
+              </div>
+            </div>
+            <div class="exp-item">
+              <div class="card">
+                <p class="text-base sm:text-lg font-semibold text-slate-800 dark:text-slate-100">Financial Secretary</p>
+                <p class="text-base sm:text-lg text-indigo-600 dark:text-indigo-400 font-medium mt-0.5">RAJUK Ex-Students' Association (RESA), CUET</p>
+                <p class="text-xs text-slate-400 dark:text-slate-500 mt-1">2022 - 2023</p>
+                <ul class="mt-2 space-y-0.5">
+                  <li class="text-xs text-slate-500 dark:text-slate-400">• Managed financial operations and budget allocation</li>
+                  <li class="text-xs text-slate-500 dark:text-slate-400">• Maintained transparent financial records and coordinated fundraising</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="fade-up">
+        <h2 class="text-base sm:text-lg font-bold text-teal-700 dark:text-teal-300 uppercase tracking-widest mb-4 flex items-center gap-2"><span>🧠</span><span>Skills</span></h2>
+        <div class="space-y-5">
+          <div>
+            <p class="text-base sm:text-lg font-semibold text-teal-700 dark:text-teal-300 mb-2">NLP &amp; ML Research</p>
+            <div>
+              <span class="skill-badge" style="background:#1d4ed8;color:#ffffff;border-color:#1d4ed8;">LLMs</span><span class="skill-badge" style="background:#1d4ed8;color:#ffffff;border-color:#1d4ed8;">NLP</span>
+              <span class="skill-badge" style="background:#1d4ed8;color:#ffffff;border-color:#1d4ed8;">Multimodal Learning</span><span class="skill-badge" style="background:#1d4ed8;color:#ffffff;border-color:#1d4ed8;">Transfer Learning</span>
+              <span class="skill-badge" style="background:#1d4ed8;color:#ffffff;border-color:#1d4ed8;">Transformer Models</span><span class="skill-badge" style="background:#1d4ed8;color:#ffffff;border-color:#1d4ed8;">Trustworthy AI</span>
+              <span class="skill-badge" style="background:#1d4ed8;color:#ffffff;border-color:#1d4ed8;">Hate Speech Detection</span><span class="skill-badge" style="background:#1d4ed8;color:#ffffff;border-color:#1d4ed8;">Seq2Seq Modeling</span>
+        
+            </div>
+          </div>
+          <div>
+            <p class="text-base sm:text-lg font-semibold text-teal-700 dark:text-teal-300 mb-2">Frameworks &amp; Tools</p>
+            <div>
+              <span class="skill-badge" style="background:#2c3842;color:#ffffff;border-color:#2c3842;">PyTorch</span><span class="skill-badge" style="background:#2c3842;color:#ffffff;border-color:#0f766e;">TensorFlow</span>
+              <span class="skill-badge" style="background:#2c3842;color:#ffffff;border-color:#2c3842;">HuggingFace</span><span class="skill-badge" style="background:#2c3842;color:#ffffff;border-color:#0f766e;">Scikit-Learn</span>
+              <span class="skill-badge" style="background:#2c3842;color:#ffffff;border-color:#2c3842;">Flask</span><span class="skill-badge" style="background:#2c3842;color:#ffffff;border-color:#0f766e;">Streamlit</span>
+              <span class="skill-badge" style="background:#2c3842;color:#ffffff;border-color:#2c3842;">Jupyter</span><span class="skill-badge" style="background:#2c3842;color:#ffffff;border-color:#0f766e;">Git / GitHub</span>
+              <span class="skill-badge" style="background:#2c3842;color:#ffffff;border-color:#2c3842;">Google Colab</span><span class="skill-badge" style="background:#2c3842;color:#ffffff;border-color:#0f766e;">MySQL</span>
+            </div>
+          </div>
+          <div>
+            <p class="text-base sm:text-lg font-semibold text-teal-700 dark:text-teal-300 mb-2">Programming</p>
+            <div>
+              <span class="skill-badge" style="background:#295a9e;color:#ffffff;border-color:#295a9e;">Python</span><span class="skill-badge" style="background:#295a9e;color:#ffffff;border-color:#334155;">Java</span>
+              <span class="skill-badge" style="background:#295a9e;color:#ffffff;border-color:#295a9e;">C / C++</span><span class="skill-badge" style="background:#295a9e;color:#ffffff;border-color:#334155;">JavaScript</span>
+            </div>
+          </div>
+          <div>
+            <p class="text-base sm:text-lg font-semibold text-teal-700 dark:text-teal-300 mb-2">Languages</p>
+            <div>
+              <span class="skill-badge" style="background:#036a44;color:#ffffff;border-color:#475569;">Bengali (Native)</span><span class="skill-badge" style="background:#036a44;color:#ffffff;border-color:#475569;">English (Professional)</span>
+            </div>
+          </div>
+          <div>
+            <p class="text-base sm:text-lg font-semibold text-teal-700 dark:text-teal-300 mb-2">Competitive Programming</p>
+            <span class="skill-badge" style="background:#1e40af;color:#ffffff;border-color:#1e40af;">800+ problems solved - Codeforces, HackerRank, AtCoder.</span>
+          </div>
+        </div>
+        <div class="mt-8">
+          <a href="#" target="_blank" class="inline-flex items-center gap-2 text-base font-semibold px-5 py-2.5 rounded-xl bg-indigo-600 text-white hover:bg-indigo-700 transition-colors shadow-md shadow-indigo-200 dark:shadow-indigo-900">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+            Download CV
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="bg-slate-50 dark:bg-slate-950">
+  <div class="max-w-5xl mx-auto px-4 sm:px-6 py-8 flex flex-col sm:flex-row items-center justify-between gap-3">
+    <p class="text-xs text-slate-400">© 2026 Md. Ayon Mia. All rights reserved.</p>
+    <div class="flex gap-4">
+      <a href="mailto:mdayon.cse@gmail.com" class="text-xs text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">mdayon.cse@gmail.com</a>
+      <a href="https://github.com/Ayon128" target="_blank" class="text-xs text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">GitHub</a>
+      <a href="https://scholar.google.com/citations?user=kfmoYAkAAAAJ" target="_blank" class="text-xs text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">Google Scholar</a>
+    </div>
+  </div>
+</footer>
+
+<script src="assets/js/main.js"></script>
+</body>
+</html>

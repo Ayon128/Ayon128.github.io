@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="description" content="Projects by Md. Ayon Mia."/>
+  <title>Projects — Md. Ayon Mia</title>
+  <script>
+    (function(){
+      const t = localStorage.getItem('theme');
+      if (t === 'dark' || (!t && window.matchMedia('(prefers-color-scheme: dark)').matches))
+        document.documentElement.classList.add('dark');
+    })();
+  </script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>tailwind.config = { darkMode: 'class' }</script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="assets/css/style.css"/>
+  <style>
+    .projects-intro { font-size: 1.05rem; line-height: 1.8; }
+    .cluster-title {
+      font-size: 1.95rem;
+      line-height: 1.2;
+      font-weight: 800;
+      color: #134e4a;
+      margin-bottom: 1rem;
+      letter-spacing: -0.01em;
+    }
+    .project-card {
+      border: 1px solid #cbd5e1;
+      border-left: 4px solid #0f766e;
+      border-radius: 14px;
+      background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+    }
+    .project-title {
+      font-size: 1.25rem;
+      line-height: 1.35;
+      font-weight: 800;
+      color: #0f172a;
+    }
+    .project-text {
+      font-size: 1rem;
+      line-height: 1.8;
+      color: #475569;
+      text-align: justify;
+    }
+    .project-list {
+      font-size: 1rem;
+      line-height: 1.75;
+      color: #475569;
+      text-align: justify;
+    }
+    .year-title {
+      font-size: 1.6rem;
+      line-height: 1.25;
+      font-weight: 800;
+      color: #134e4a;
+      margin-bottom: 0.9rem;
+      letter-spacing: -0.01em;
+    }
+    .project-link {
+      font-size: 0.98rem;
+      font-weight: 600;
+      color: #0f766e;
+    }
+    .project-link:hover { color: #0f5e58; }
+    .academic-pill {
+      display: inline-flex;
+      align-items: center;
+      border-radius: 9999px;
+      border: 1px solid #99f6e4;
+      background: #f0fdfa;
+      color: #115e59;
+      font-size: 0.78rem;
+      font-weight: 700;
+      padding: 0.2rem 0.65rem;
+      white-space: nowrap;
+    }
+    .dark .cluster-title { color: #5eead4; }
+    .dark .year-title { color: #5eead4; }
+    .dark .project-card {
+      background: #0f172a;
+      border-color: #334155;
+      border-left-color: #14b8a6;
+    }
+    .dark .project-title { color: #e2e8f0; }
+    .dark .project-text,
+    .dark .project-list { color: #94a3b8; }
+    .dark .project-link { color: #5eead4; }
+    .dark .project-link:hover { color: #99f6e4; }
+    .dark .academic-pill {
+      border-color: #115e59;
+      background: #134e4a;
+      color: #99f6e4;
+    }
+    @media (max-width: 640px) {
+      .cluster-title { font-size: 1.55rem; }
+      .year-title { font-size: 1.35rem; }
+      .project-title { font-size: 1.08rem; }
+      .project-text, .project-list { font-size: 0.96rem; }
+    }
+  </style>
+</head>
+<body class="bg-slate-50 dark:bg-slate-950 text-slate-800 dark:text-slate-200 transition-colors duration-300">
+
+<nav id="navbar" class="sticky top-0 z-50 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md border-b border-slate-100 dark:border-slate-800 transition-all duration-300">
+  <div class="max-w-5xl mx-auto px-4 sm:px-6 flex items-center justify-between h-14">
+    <a href="index.html" class="font-bold text-base text-indigo-600 dark:text-indigo-400 tracking-tight hover:opacity-80 transition-opacity shrink-0">Md. Ayon Mia</a>
+    <div class="hidden lg:flex items-center gap-5">
+      <a href="background.html" class="nav-link">Background</a>
+      <a href="publications.html" class="nav-link">Publications</a>
+      <a href="achievements.html" class="nav-link">Achievements</a>
+      <a href="projects.html" class="nav-link active">Projects</a>
+      <a href="notes/index.html" class="nav-link">Notes</a>
+    </div>
+    <div class="hidden lg:flex items-center gap-3">
+      <button data-dark-toggle class="dark-toggle" aria-label="Toggle dark mode"></button>
+    </div>
+    <div class="flex lg:hidden items-center gap-3">
+      <button data-dark-toggle class="dark-toggle" aria-label="Toggle dark mode"></button>
+      <button id="menuBtn" class="p-1.5 rounded-lg text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+      </button>
+    </div>
+  </div>
+  <div id="mobileMenu" class="hidden lg:hidden px-4 pb-3 space-y-1 bg-white dark:bg-slate-900 border-t border-slate-100 dark:border-slate-800">
+    <a href="background.html" class="block py-2 text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-indigo-600">Background</a>
+    <a href="publications.html" class="block py-2 text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-indigo-600">Publications</a>
+    <a href="achievements.html" class="block py-2 text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-indigo-600">Achievements</a>
+    <a href="projects.html" class="block py-2 text-sm font-medium text-indigo-600">Projects</a>
+    <a href="notes/index.html" class="block py-2 text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-indigo-600">Notes</a>
+  </div>
+</nav>
+
+<section class="max-w-5xl mx-auto px-4 sm:px-6 py-20">
+  <h1 class="section-title fade-up">🛠️ Projects</h1>
+  <p class="fade-up projects-intro text-slate-600 dark:text-slate-400 w-full max-w-none text-justify sm:whitespace-nowrap mb-8">
+    Some of the projects I've worked on include software development, machine learning, and web applications.
+  </p>
+
+  <div class="space-y-10">
+    <div class="fade-up">
+      <!-- <h2 class="year-title">2025</h2> -->
+      <div class="card project-card">
+        <div class="flex items-start justify-between gap-3 mb-2">
+          <h3 class="project-title">DocuMind-RAG: Intelligent PDF Assistant</h3>
+          <span class="academic-pill">April 2025 - May 2025</span>
+        </div>
+        <p class="project-text mb-2">A conversational PDF assistant built using Retrieval-Augmented Generation (RAG) for intelligent document interaction.</p>
+        <ul class="project-list list-disc ml-5 mt-3 space-y-1">
+          <li>Built a conversational assistant using RAG for natural language querying of PDF documents.</li>
+          <li>Integrated LLMs for contextual answer generation and FAISS for semantic search on embedded document chunks.</li>
+          <li>Developed a clean, interactive UI with Streamlit for real-time PDF analysis and question answering.</li>
+        </ul>
+        <div class="mt-3 flex flex-wrap gap-1.5"><span class="skill-badge">Python</span><span class="skill-badge">Streamlit</span><span class="skill-badge">LangChain</span><span class="skill-badge">LLMs</span><span class="skill-badge">FAISS</span><span class="skill-badge">Sentence-Transformers</span></div>
+      </div>
+    </div>
+
+    <div class="fade-up">
+      <!-- <h2 class="year-title">2023-2024</h2> -->
+      <div class="card project-card">
+        <div class="flex items-start justify-between gap-3 mb-2">
+          <h3 class="project-title">CUET Hall Service</h3>
+          <span class="academic-pill">September 2023 - January 2024</span>
+        </div>
+        <p class="project-text mb-2">A comprehensive hall management system designed to streamline services in university dormitories.</p>
+        <a href="https://github.com/Ayon128/CUET_Hall_Service_System" target="_blank" rel="noopener noreferrer" class="project-link hover:underline">GitHub Repository</a>
+        <ul class="project-list list-disc ml-5 mt-3 space-y-1">
+          <li>Architected three-panel system (Admin, Student, Service Provider) using Laravel for streamlined hall service management.</li>
+          <li>Implemented comprehensive admin panel with user management and request approval workflow features.</li>
+          <li>Developed student portal for service requests with priority levels and real-time status tracking notifications.</li>
+          <li>Created service provider interface with task management and automated report generation capabilities.</li>
+        </ul>
+        <div class="mt-3 flex flex-wrap gap-1.5"><span class="skill-badge">Laravel</span><span class="skill-badge">MySQL</span><span class="skill-badge">Bootstrap</span><span class="skill-badge">CSS</span><span class="skill-badge">PHP</span></div>
+      </div>
+    </div>
+
+    <div class="fade-up">
+      <!-- <h2 class="year-title">2022-2023</h2> -->
+      <div class="space-y-5">
+        <div class="card project-card">
+          <div class="flex items-start justify-between gap-3 mb-2">
+            <h3 class="project-title">T20 Score Predictor</h3>
+            <span class="academic-pill">October 2022 - January 2023</span>
+          </div>
+          <p class="project-text mb-2">A machine learning-based cricket score prediction system that forecasts team totals based on match statistics.</p>
+          <a href="https://github.com/Ayon128/T20_Score_Prediction" target="_blank" rel="noopener noreferrer" class="project-link hover:underline">GitHub Repository</a>
+          <ul class="project-list list-disc ml-5 mt-3 space-y-1">
+            <li>Built interactive web interface using Flask and implemented XGBoost regression model for cricket score predictions.</li>
+            <li>Designed feature engineering pipeline to transform match data into predictive variables.</li>
+            <li>Created user-friendly interface for real-time score forecasting during matches.</li>
+          </ul>
+          <div class="mt-3 flex flex-wrap gap-1.5"><span class="skill-badge">Python</span><span class="skill-badge">NumPy</span><span class="skill-badge">Pandas</span><span class="skill-badge">Matplotlib</span><span class="skill-badge">XGBoost</span><span class="skill-badge">Streamlit</span></div>
+        </div>
+
+        <div class="card project-card">
+          <div class="flex items-start justify-between gap-3 mb-2">
+            <h3 class="project-title">Fruit and Vegetable Recognition</h3>
+            <span class="academic-pill">October 2022 - January 2023</span>
+          </div>
+          <p class="project-text mb-2">A CNN-based classification system that can identify various fruits and vegetables from images.</p>
+          <a href="https://github.com/Ayon128/Fruit-and-vegetable-recognition" target="_blank" rel="noopener noreferrer" class="project-link hover:underline">GitHub Repository</a>
+          <ul class="project-list list-disc ml-5 mt-3 space-y-1">
+            <li>Implemented fine-tuned VGG-19 architecture achieving 94% classification accuracy across 136 classes.</li>
+            <li>Developed robust image preprocessing pipeline for handling various lighting conditions and backgrounds.</li>
+            <li>Optimized model parameters for improved performance and reduced computational requirements.</li>
+          </ul>
+          <div class="mt-3 flex flex-wrap gap-1.5"><span class="skill-badge">Python</span><span class="skill-badge">TensorFlow</span><span class="skill-badge">VGG-19</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="fade-up">
+      <!-- <h2 class="year-title">2022</h2> -->
+      <div class="card project-card">
+        <div class="flex items-start justify-between gap-3 mb-2">
+          <h3 class="project-title">NOKSHA: E-commerce Platform</h3>
+          <span class="academic-pill">May 2022 - September 2022</span>
+        </div>
+        <p class="project-text mb-2">A full-stack e-commerce platform specializing in clothing and fashion products.</p>
+        <a href="https://github.com/Ayon128/Noksha-1" target="_blank" rel="noopener noreferrer" class="project-link hover:underline">GitHub Repository</a>
+        <ul class="project-list list-disc ml-5 mt-3 space-y-1">
+          <li>Built full-stack e-commerce platform with user authentication and profile management system.</li>
+          <li>Implemented responsive product catalog with search, filtering and shopping cart features.</li>
+          <li>Developed secure payment processing and order tracking functionality.</li>
+        </ul>
+        <div class="mt-3 flex flex-wrap gap-1.5"><span class="skill-badge">MongoDB</span><span class="skill-badge">Express.js</span><span class="skill-badge">React.js</span><span class="skill-badge">Node.js</span></div>
+      </div>
+    </div>
+
+    <div class="fade-up">
+      <!-- <h2 class="year-title">2021</h2> -->
+      <div class="card project-card">
+        <div class="flex items-start justify-between gap-3 mb-2">
+          <h3 class="project-title">Electricity Billing System</h3>
+          <span class="academic-pill">January 2021 - February 2021</span>
+        </div>
+        <p class="project-text mb-2">A utility management application for calculating and generating electricity bills.</p>
+        <a href="https://github.com/Ayon128/Electricity-Billing-System" target="_blank" rel="noopener noreferrer" class="project-link hover:underline">GitHub Repository</a>
+        <ul class="project-list list-disc ml-5 mt-3 space-y-1">
+          <li>Developed comprehensive billing calculation system based on tiered consumption rates.</li>
+          <li>Created automated billing generation based on consumption data.</li>
+          <li>Implemented user management for both administrators and customers.</li>
+        </ul>
+        <div class="mt-3 flex flex-wrap gap-1.5"><span class="skill-badge">Java</span><span class="skill-badge">Java Swing</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="bg-slate-50 dark:bg-slate-950">
+  <div class="max-w-5xl mx-auto px-4 sm:px-6 py-8 flex flex-col sm:flex-row items-center justify-between gap-3">
+    <p class="text-xs text-slate-400">© 2026 Md. Ayon Mia. All rights reserved.</p>
+    <div class="flex gap-4">
+      <a href="mailto:mdayon.cse@gmail.com" class="text-xs text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">mdayon.cse@gmail.com</a>
+      <a href="https://github.com/Ayon128" target="_blank" class="text-xs text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">GitHub</a>
+      <a href="https://scholar.google.com/citations?user=kfmoYAkAAAAJ" target="_blank" class="text-xs text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">Google Scholar</a>
+    </div>
+  </div>
+</footer>
+
+<script src="assets/js/main.js"></script>
+</body>
+</html>

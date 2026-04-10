@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Representation Learning: A Gentle Introduction — Md. Ayon Mia</title>
+  <script>
+    (function(){
+      const t = localStorage.getItem('theme');
+      if (t === 'dark' || (!t && window.matchMedia('(prefers-color-scheme: dark)').matches))
+        document.documentElement.classList.add('dark');
+    })();
+  </script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>tailwind.config = { darkMode: 'class' }</script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="../assets/css/style.css"/>
+  <style>
+    .prose h2 { font-size: 1.15rem; font-weight: 700; margin: 2rem 0 0.75rem; color: #1e293b; }
+    .prose h3 { font-size: 1rem; font-weight: 600; margin: 1.5rem 0 0.5rem; color: #334155; }
+    .prose p  { font-size: 0.9rem; line-height: 1.8; margin-bottom: 1rem; color: #475569; }
+    .prose ul { list-style: disc; padding-left: 1.4rem; margin-bottom: 1rem; }
+    .prose li { font-size: 0.9rem; line-height: 1.8; color: #475569; margin-bottom: 0.25rem; }
+    .prose strong { color: #1e293b; font-weight: 600; }
+    .prose code { background: #f1f5f9; padding: 2px 6px; border-radius: 5px; font-size: 0.82rem; color: var(--accent-700); font-family: 'Fira Mono', monospace; }
+    .prose blockquote { border-left: 3px solid var(--accent-500); padding-left: 1rem; margin: 1.25rem 0; color: #64748b; font-style: italic; }
+    .dark .prose h2 { color: #f1f5f9; }
+    .dark .prose h3 { color: #e2e8f0; }
+    .dark .prose p  { color: #94a3b8; }
+    .dark .prose li { color: #94a3b8; }
+    .dark .prose strong { color: #f1f5f9; }
+    .dark .prose code { background: #1e293b; color: var(--accent-300); }
+    .dark .prose blockquote { color: #64748b; }
+  </style>
+</head>
+<body class="bg-slate-50 dark:bg-slate-950 text-slate-800 dark:text-slate-200">
+
+  <nav id="navbar" class="sticky top-0 z-50 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md border-b border-slate-100 dark:border-slate-800 transition-all duration-300">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 flex items-center justify-between h-14">
+      <a href="../index.html" class="font-bold text-base text-indigo-600 dark:text-indigo-400 tracking-tight hover:opacity-80 transition-opacity shrink-0">Md. Ayon Mia</a>
+      <div class="hidden lg:flex items-center gap-5">
+        <a href="../background.html" class="nav-link inline-flex items-center gap-1.5"><span>🎓</span><span>Background</span></a>
+        <a href="../publications.html" class="nav-link inline-flex items-center gap-1.5"><span>📑</span><span>Publications</span></a>
+        <a href="../achievements.html" class="nav-link inline-flex items-center gap-1.5"><span>🏅</span><span>Achievements</span></a>
+        <a href="../projects.html" class="nav-link inline-flex items-center gap-1.5"><span>🛠️</span><span>Projects</span></a>
+        <a href="index.html" class="nav-link active inline-flex items-center gap-1.5"><span>📝</span><span>Notes</span></a>
+      </div>
+      <div class="hidden lg:flex items-center gap-3">
+        <button data-dark-toggle class="dark-toggle" aria-label="Toggle dark mode"></button>
+      </div>
+      <div class="flex lg:hidden items-center gap-3">
+        <button data-dark-toggle class="dark-toggle" aria-label="Toggle dark mode"></button>
+        <button id="menuBtn" class="p-1.5 rounded-lg text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+        </button>
+      </div>
+    </div>
+    <div id="mobileMenu" class="hidden lg:hidden px-4 pb-3 space-y-1 bg-white dark:bg-slate-900 border-t border-slate-100 dark:border-slate-800">
+      <a href="../background.html" class="block py-2 text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-indigo-600">🎓 Background</a>
+      <a href="../publications.html" class="block py-2 text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-indigo-600">📑 Publications</a>
+      <a href="../achievements.html" class="block py-2 text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-indigo-600">🏅 Achievements</a>
+      <a href="../projects.html" class="block py-2 text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-indigo-600">🛠️ Projects</a>
+      <a href="index.html" class="block py-2 text-sm font-medium text-indigo-600">📝 Notes</a>
+    </div>
+  </nav>
+
+  <!-- Article -->
+  <article class="max-w-3xl mx-auto px-4 sm:px-6 py-14">
+
+    <!-- Header -->
+    <div class="mb-10">
+      <div class="flex flex-wrap gap-2 mb-4">
+        <span class="badge badge-naacl">🧠 Representation Learning</span>
+        <span class="badge badge-journal">📘 Deep Learning</span>
+      </div>
+      <h1 class="text-2xl sm:text-3xl font-bold text-slate-900 dark:text-white leading-tight mb-3">
+        Representation Learning: A Gentle Introduction
+      </h1>
+      <div class="flex items-center gap-3 text-xs text-slate-400 dark:text-slate-500">
+        <span>Md. Ayon Mia</span>
+        <span>·</span>
+        <span>April 2026</span>
+        <span>·</span>
+        <span>5 min read</span>
+      </div>
+    </div>
+
+    <!-- Content -->
+    <div class="prose">
+
+      <blockquote>
+        "The goal of representation learning is to find a transformation of the data that makes it easier to extract useful information for a given task."
+      </blockquote>
+
+      <h2>What is a Representation?</h2>
+      <p>
+        When we work with raw data — a sentence, an image, a user's click history — computers can't directly reason over the surface form. They need numbers. But not just <em>any</em> numbers: the representation should capture the <strong>structure and semantics</strong> of the input in a way that is useful for downstream tasks.
+      </p>
+      <p>
+        Think of the word <code>king</code>. You could represent it as its index in a vocabulary (say, <code>5421</code>). That number tells the model nothing about its meaning. But if you represent it as a high-dimensional vector where <code>king - man + woman ≈ queen</code>, suddenly the geometry of the space is encoding semantic relationships.
+      </p>
+      <p>
+        That is the magic of representation learning — finding vector spaces where <strong>proximity reflects meaning</strong>.
+      </p>
+
+      <h2>From One-Hot to Embeddings</h2>
+      <p>
+        The earliest NLP representations were <strong>one-hot vectors</strong>: a sparse binary vector with a 1 at the word's index and 0 everywhere else. These are orthogonal by construction — every word is equally distant from every other word. There is no way to encode that <em>cat</em> and <em>dog</em> are more similar than <em>cat</em> and <em>airplane</em>.
+      </p>
+      <p>
+        <strong>Word2Vec</strong> (Mikolov et al., 2013) changed this. By training a shallow neural network to predict surrounding words (CBOW) or to use a word to predict its context (Skip-gram), it learned dense low-dimensional vectors where semantically similar words cluster together. These <em>static embeddings</em> had a major limitation: a single fixed vector per word regardless of context. The word <em>bank</em> has the same vector whether you're talking about a river bank or a financial bank.
+      </p>
+
+      <h2>Contextual Representations: The Transformer Era</h2>
+      <p>
+        <strong>ELMo</strong> (2018) was among the first to produce context-sensitive representations using bidirectional LSTMs. Then came the shift that changed everything: the <strong>Transformer architecture</strong> (Vaswani et al., 2017) with its self-attention mechanism.
+      </p>
+      <p>
+        <strong>BERT</strong> (Devlin et al., 2019) used Transformers pre-trained on masked language modelling (MLM) and next-sentence prediction (NSP). Crucially, BERT produces a <em>different</em> representation for each occurrence of a word depending on its full context. The model learned to encode rich syntactic and semantic structure by attending over all other tokens simultaneously.
+      </p>
+      <ul>
+        <li><strong>BERT</strong>: Bidirectional encoder, strong at understanding tasks (classification, NER, QA)</li>
+        <li><strong>GPT family</strong>: Autoregressive decoder, strong at generation tasks</li>
+        <li><strong>XLM-RoBERTa</strong>: Multilingual BERT variant, handles 100+ languages — central to my own research on low-resource NLP</li>
+      </ul>
+
+      <h2>Why Does This Matter for Low-Resource NLP?</h2>
+      <p>
+        For languages like Bangla, Tamil, or Malayalam — where labelled data is scarce — the quality of representations is everything. Pre-trained multilingual models like XLM-RoBERTa encode cross-lingual knowledge acquired from large multilingual corpora. By fine-tuning on a small labelled dataset in a low-resource language, we transfer the rich representations learned from higher-resource languages.
+      </p>
+      <p>
+        Much of my research explores how to extract, combine, and adapt these representations for tasks like sentiment analysis, misogyny detection, and fake news classification in Bangla and Dravidian languages. Feature fusion strategies — pooling CLS tokens, mean-pooling token embeddings, CNN over token sequences — are different ways of summarising what the model has learned into a single fixed-size vector useful for classification.
+      </p>
+
+      <h2>Key Takeaways</h2>
+      <ul>
+        <li>A representation is a mapping from raw input to a vector space designed to preserve useful structure.</li>
+        <li>Learning good representations often makes downstream tasks dramatically easier.</li>
+        <li>Pre-training on large corpora and fine-tuning on task-specific data is the dominant paradigm in NLP today.</li>
+        <li>For low-resource languages, leveraging multilingual pre-trained models is the most effective strategy available.</li>
+      </ul>
+
+      <h2>Further Reading</h2>
+      <ul>
+        <li>Mikolov et al. (2013) — <em>Distributed Representations of Words and Phrases</em></li>
+        <li>Devlin et al. (2019) — <em>BERT: Pre-training of Deep Bidirectional Transformers</em></li>
+        <li>Conneau et al. (2020) — <em>Unsupervised Cross-lingual Representation Learning at Scale (XLM-R)</em></li>
+        <li>Bengio et al. (2013) — <em>Representation Learning: A Review and New Perspectives</em></li>
+      </ul>
+
+    </div>
+
+    <div class="mt-12 pt-8 border-t border-slate-200 dark:border-slate-800">
+      <a href="index.html" class="text-sm font-medium text-indigo-600 dark:text-indigo-400 hover:underline">← Back to Notes</a>
+    </div>
+  </article>
+
+  <script src="../assets/js/main.js"></script>
+</body>
+</html>
