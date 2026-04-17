@@ -1,160 +1,1253 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Representation Learning: A Gentle Introduction — Md. Ayon Mia</title>
-  <script>
-    (function(){
-      const t = localStorage.getItem('theme');
-      if (t === 'dark' || (!t && window.matchMedia('(prefers-color-scheme: dark)').matches))
-        document.documentElement.classList.add('dark');
-    })();
-  </script>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>tailwind.config = { darkMode: 'class' }</script>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
-  <link rel="stylesheet" href="../assets/css/style.css"/>
-  <style>
-    .prose h2 { font-size: 1.15rem; font-weight: 700; margin: 2rem 0 0.75rem; color: #1e293b; }
-    .prose h3 { font-size: 1rem; font-weight: 600; margin: 1.5rem 0 0.5rem; color: #334155; }
-    .prose p  { font-size: 0.9rem; line-height: 1.8; margin-bottom: 1rem; color: #475569; }
-    .prose ul { list-style: disc; padding-left: 1.4rem; margin-bottom: 1rem; }
-    .prose li { font-size: 0.9rem; line-height: 1.8; color: #475569; margin-bottom: 0.25rem; }
-    .prose strong { color: #1e293b; font-weight: 600; }
-    .prose code { background: #f1f5f9; padding: 2px 6px; border-radius: 5px; font-size: 0.82rem; color: var(--accent-700); font-family: 'Fira Mono', monospace; }
-    .prose blockquote { border-left: 3px solid var(--accent-500); padding-left: 1rem; margin: 1.25rem 0; color: #64748b; font-style: italic; }
-    .dark .prose h2 { color: #f1f5f9; }
-    .dark .prose h3 { color: #e2e8f0; }
-    .dark .prose p  { color: #94a3b8; }
-    .dark .prose li { color: #94a3b8; }
-    .dark .prose strong { color: #f1f5f9; }
-    .dark .prose code { background: #1e293b; color: var(--accent-300); }
-    .dark .prose blockquote { color: #64748b; }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Representation Learning</title>
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;0,700;1,400;1,600&family=JetBrains+Mono:wght@300;400;500;600&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0e0f13;
+  --surface: #14151a;
+  --surface2: #1c1d24;
+  --border: rgba(255,255,255,0.07);
+  --text: #e8e6e0;
+  --muted: #7a7870;
+  --accent: #f0a500;
+  --accent2: #3ecfb2;
+  --accent3: #e05a5a;
+  --accent4: #7b8ef7;
+  --code-bg: #0a0b0e;
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Outfit', sans-serif;
+  font-size: 16px;
+  line-height: 1.75;
+}
+
+/* ── SIDEBAR NAV ── */
+.toc {
+  position: fixed;
+  left: 0; top: 0; bottom: 0;
+  width: 220px;
+  background: var(--surface);
+  border-right: 1px solid var(--border);
+  padding: 40px 0 40px;
+  overflow-y: auto;
+  z-index: 100;
+}
+
+.toc-brand {
+  padding: 0 20px 24px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 20px;
+}
+
+.toc-brand .series {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--accent);
+  display: block;
+  margin-bottom: 4px;
+}
+
+.toc-brand .day {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.toc a {
+  display: block;
+  padding: 7px 20px;
+  font-size: 12.5px;
+  color: var(--muted);
+  text-decoration: none;
+  transition: color 0.15s, background 0.15s;
+  border-left: 2px solid transparent;
+}
+
+.toc a:hover {
+  color: var(--text);
+  background: rgba(255,255,255,0.03);
+}
+
+.toc a.active {
+  color: var(--accent);
+  border-left-color: var(--accent);
+  background: rgba(240,165,0,0.05);
+}
+
+.toc .toc-section {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 8.5px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(122,120,112,0.5);
+  padding: 18px 20px 6px;
+}
+
+/* ── MAIN CONTENT ── */
+.main {
+  margin-left: 220px;
+  max-width: 780px;
+  padding: 0 48px 100px;
+}
+
+/* ── HERO ── */
+.hero {
+  padding: 72px 0 56px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 64px;
+  position: relative;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: 0; left: -48px; right: -48px; bottom: 0;
+  background: radial-gradient(ellipse 80% 60% at 30% 40%, rgba(240,165,0,0.06) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.hero-meta {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+}
+
+.badge {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  padding: 4px 10px;
+  border-radius: 3px;
+}
+
+.badge-day { background: rgba(240,165,0,0.15); color: var(--accent); border: 1px solid rgba(240,165,0,0.3); }
+.badge-level { background: rgba(62,207,178,0.1); color: var(--accent2); border: 1px solid rgba(62,207,178,0.2); }
+.badge-read { background: rgba(255,255,255,0.05); color: var(--muted); border: 1px solid var(--border); }
+
+.hero h1 {
+  font-family: 'Lora', serif;
+  font-size: clamp(30px, 5vw, 48px);
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  margin-bottom: 18px;
+  color: #fff;
+}
+
+.hero h1 em {
+  font-style: italic;
+  color: var(--accent);
+}
+
+.hero .tagline {
+  font-size: 17px;
+  color: var(--muted);
+  max-width: 580px;
+  line-height: 1.65;
+  font-weight: 300;
+}
+
+.hero .tagline strong {
+  color: var(--text);
+  font-weight: 500;
+}
+
+/* ── SECTIONS ── */
+.section {
+  margin-bottom: 72px;
+  animation: fadeIn 0.5s ease both;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.section-label {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 28px;
+}
+
+.section-num {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--accent);
+  letter-spacing: 0.1em;
+  background: rgba(240,165,0,0.1);
+  border: 1px solid rgba(240,165,0,0.2);
+  padding: 3px 9px;
+  border-radius: 3px;
+}
+
+.section h2 {
+  font-family: 'Lora', serif;
+  font-size: 26px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: #fff;
+  line-height: 1.25;
+}
+
+.section h3 {
+  font-family: 'Outfit', sans-serif;
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text);
+  margin: 36px 0 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.section h3::before {
+  content: '';
+  display: block;
+  width: 3px;
+  height: 18px;
+  background: var(--accent2);
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+
+p { margin-bottom: 16px; color: var(--text); font-weight: 300; }
+p strong { font-weight: 600; color: #fff; }
+p em { color: var(--accent2); font-style: italic; }
+
+/* ── CALLOUT BOXES ── */
+.callout {
+  border-radius: 8px;
+  padding: 20px 24px;
+  margin: 28px 0;
+  position: relative;
+  border-left: 3px solid;
+}
+
+.callout-intuition {
+  background: rgba(240,165,0,0.06);
+  border-color: var(--accent);
+}
+
+.callout-math {
+  background: rgba(123,142,247,0.06);
+  border-color: var(--accent4);
+}
+
+.callout-insight {
+  background: rgba(62,207,178,0.06);
+  border-color: var(--accent2);
+}
+
+.callout-warning {
+  background: rgba(224,90,90,0.06);
+  border-color: var(--accent3);
+}
+
+.callout-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+  display: block;
+}
+
+.callout-intuition .callout-label { color: var(--accent); }
+.callout-math .callout-label { color: var(--accent4); }
+.callout-insight .callout-label { color: var(--accent2); }
+.callout-warning .callout-label { color: var(--accent3); }
+
+.callout p { margin-bottom: 8px; font-size: 14.5px; }
+.callout p:last-child { margin-bottom: 0; }
+
+/* ── MATH DISPLAY ── */
+.math-block {
+  background: var(--code-bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 24px 28px;
+  margin: 24px 0;
+  overflow-x: auto;
+  position: relative;
+}
+
+.math-block::before {
+  content: 'MATH';
+  position: absolute;
+  top: 10px; right: 14px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.2em;
+  color: rgba(123,142,247,0.4);
+}
+
+.math-block .eq {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 15px;
+  color: #c8c5f0;
+  line-height: 2;
+  display: block;
+}
+
+.math-block .eq-label {
+  font-size: 12px;
+  color: var(--muted);
+  margin-top: 6px;
+  display: block;
+  font-family: 'Outfit', sans-serif;
+  font-weight: 300;
+}
+
+/* ── CODE BLOCKS ── */
+.code-block {
+  background: var(--code-bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+  margin: 24px 0;
+}
+
+.code-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 18px;
+  background: rgba(255,255,255,0.03);
+  border-bottom: 1px solid var(--border);
+}
+
+.code-lang {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--accent2);
+}
+
+.code-desc {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  color: var(--muted);
+}
+
+pre {
+  padding: 22px 22px;
+  overflow-x: auto;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+  line-height: 1.8;
+  color: #c9c7c0;
+}
+
+.kw { color: #f0a500; }       /* keywords */
+.fn { color: #3ecfb2; }       /* functions */
+.st { color: #a8d878; }       /* strings */
+.cm { color: #4a4f5a; font-style: italic; } /* comments */
+.nm { color: #7b8ef7; }       /* numbers */
+.tp { color: #e05a5a; }       /* types/classes */
+
+/* ── ANALOGY CARD ── */
+.analogy-card {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 28px;
+  margin: 28px 0;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 20px;
+  align-items: start;
+}
+
+.analogy-icon {
+  font-size: 36px;
+  line-height: 1;
+}
+
+.analogy-title {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 8px;
+  display: block;
+}
+
+.analogy-body {
+  font-size: 14.5px;
+  color: var(--text);
+  line-height: 1.65;
+  font-weight: 300;
+}
+
+/* ── VISUAL DIAGRAM ── */
+.diagram {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 32px;
+  margin: 28px 0;
+  text-align: center;
+}
+
+.diagram-title {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 24px;
+  display: block;
+}
+
+.pipeline {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  flex-wrap: wrap;
+  row-gap: 16px;
+}
+
+.pipe-box {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 12px 18px;
+  font-size: 13px;
+  font-weight: 500;
+  text-align: center;
+  min-width: 100px;
+}
+
+.pipe-box .pipe-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  color: var(--muted);
+  display: block;
+  margin-bottom: 4px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.pipe-box .pipe-val {
+  font-size: 14px;
+  font-weight: 600;
+  color: #fff;
+}
+
+.pipe-arrow {
+  font-size: 18px;
+  color: var(--accent);
+  padding: 0 8px;
+  font-weight: 300;
+}
+
+.pipe-box.highlight {
+  border-color: var(--accent2);
+  background: rgba(62,207,178,0.06);
+}
+
+.pipe-box.highlight .pipe-val { color: var(--accent2); }
+
+/* ── COMPARISON TABLE ── */
+.compare-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 24px 0;
+  font-size: 14px;
+}
+
+.compare-table th {
+  text-align: left;
+  padding: 10px 16px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+  border-bottom: 1px solid var(--border);
+  font-weight: 400;
+}
+
+.compare-table td {
+  padding: 12px 16px;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+  font-weight: 300;
+  vertical-align: top;
+  line-height: 1.5;
+}
+
+.compare-table tr:hover td {
+  background: rgba(255,255,255,0.02);
+}
+
+.compare-table td:first-child {
+  font-weight: 500;
+  color: var(--accent2);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+  white-space: nowrap;
+}
+
+/* ── KEY TAKEAWAY ── */
+.key-takeaway {
+  background: linear-gradient(135deg, rgba(240,165,0,0.08), rgba(62,207,178,0.08));
+  border: 1px solid rgba(240,165,0,0.2);
+  border-radius: 10px;
+  padding: 28px 32px;
+  margin: 40px 0;
+}
+
+.key-takeaway .kt-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--accent);
+  display: block;
+  margin-bottom: 12px;
+}
+
+.key-takeaway p {
+  font-family: 'Lora', serif;
+  font-size: 17px;
+  line-height: 1.6;
+  color: var(--text);
+  font-style: italic;
+  margin: 0;
+  font-weight: 400;
+}
+
+/* ── BLOG SUMMARY BOX ── */
+.blog-summary {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 32px;
+  margin: 48px 0;
+}
+
+.blog-summary .bs-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--border);
+}
+
+.bs-icon {
+  width: 36px; height: 36px;
+  background: rgba(240,165,0,0.1);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 17px;
+  flex-shrink: 0;
+}
+
+.bs-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: #fff;
+}
+
+.bs-sub {
+  font-size: 11px;
+  color: var(--muted);
+  font-family: 'JetBrains Mono', monospace;
+}
+
+.blog-summary ul {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+}
+
+.blog-summary ul li {
+  font-size: 14px;
+  color: var(--text);
+  padding-left: 20px;
+  position: relative;
+  line-height: 1.55;
+  font-weight: 300;
+}
+
+.blog-summary ul li::before {
+  content: '✓';
+  position: absolute;
+  left: 0;
+  color: var(--accent2);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+/* ── QUIZ ── */
+.quiz {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 28px;
+  margin: 40px 0;
+}
+
+.quiz-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--accent3);
+  display: block;
+  margin-bottom: 14px;
+}
+
+.quiz-q {
+  font-size: 15px;
+  font-weight: 500;
+  color: #fff;
+  margin-bottom: 8px;
+}
+
+.quiz-hint {
+  font-size: 13px;
+  color: var(--muted);
+  font-family: 'JetBrains Mono', monospace;
+  font-style: italic;
+}
+
+hr.section-divider {
+  border: none;
+  border-top: 1px solid var(--border);
+  margin: 56px 0;
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 900px) {
+  .toc { display: none; }
+  .main { margin-left: 0; padding: 0 20px 80px; }
+  .pipeline { flex-direction: column; align-items: center; }
+  .pipe-arrow { transform: rotate(90deg); }
+}
+</style>
 </head>
-<body class="bg-slate-50 dark:bg-slate-950 text-slate-800 dark:text-slate-200">
+<body>
 
-  <nav id="navbar" class="sticky top-0 z-50 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md border-b border-slate-100 dark:border-slate-800 transition-all duration-300">
-    <div class="max-w-5xl mx-auto px-4 sm:px-6 flex items-center justify-between h-14">
-      <a href="../index.html" class="font-bold text-base text-indigo-600 dark:text-indigo-400 tracking-tight hover:opacity-80 transition-opacity shrink-0">Md. Ayon Mia</a>
-      <div class="hidden lg:flex items-center gap-5">
-        <a href="../background.html" class="nav-link inline-flex items-center gap-1.5"><span>🎓</span><span>Background</span></a>
-        <a href="../publications.html" class="nav-link inline-flex items-center gap-1.5"><span>📑</span><span>Publications</span></a>
-        <a href="../achievements.html" class="nav-link inline-flex items-center gap-1.5"><span>🏅</span><span>Achievements</span></a>
-        <a href="../projects.html" class="nav-link inline-flex items-center gap-1.5"><span>🛠️</span><span>Projects</span></a>
-        <a href="index.html" class="nav-link active inline-flex items-center gap-1.5"><span>📝</span><span>Notes</span></a>
-      </div>
-      <div class="hidden lg:flex items-center gap-3">
-        <button data-dark-toggle class="dark-toggle" aria-label="Toggle dark mode"></button>
-      </div>
-      <div class="flex lg:hidden items-center gap-3">
-        <button data-dark-toggle class="dark-toggle" aria-label="Toggle dark mode"></button>
-        <button id="menuBtn" class="p-1.5 rounded-lg text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
-        </button>
-      </div>
+<!-- SIDEBAR -->
+<nav class="toc">
+  <div class="toc-brand">
+    <!-- <span class="series">Deep ML Series</span>
+    <div class="day">Day 1 of 28</div> -->
+  </div>
+  <div class="toc-section">Contents</div>
+  <a href="#intro" class="active">Introduction</a>
+  <a href="#what-is-repr">What Is Representation?</a>
+  <a href="#why-it-matters">Why It Matters</a>
+  <a href="#manifold">Manifold Hypothesis</a>
+  <a href="#geometry">Geometric View</a>
+  <a href="#math">The Math</a>
+  <a href="#linear-nonlinear">Linear vs Non-Linear</a>
+  <a href="#good-repr">What is a Good Representation?</a>
+  <a href="#code">Code</a>
+  <a href="#summary">Blog Summary</a>
+</nav>
+
+<!-- MAIN CONTENT -->
+<main class="main">
+
+  <!-- HERO -->
+  <div class="hero" id="intro">
+    <div class="hero-meta">
+      <!-- <span class="badge badge-day">Day 01 / 28</span>
+      <span class="badge badge-level">Beginner → Research Level</span>
+      <span class="badge badge-read">~35 min read</span> -->
     </div>
-    <div id="mobileMenu" class="hidden lg:hidden px-4 pb-3 space-y-1 bg-white dark:bg-slate-900 border-t border-slate-100 dark:border-slate-800">
-      <a href="../background.html" class="block py-2 text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-indigo-600">🎓 Background</a>
-      <a href="../publications.html" class="block py-2 text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-indigo-600">📑 Publications</a>
-      <a href="../achievements.html" class="block py-2 text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-indigo-600">🏅 Achievements</a>
-      <a href="../projects.html" class="block py-2 text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-indigo-600">🛠️ Projects</a>
-      <a href="index.html" class="block py-2 text-sm font-medium text-indigo-600">📝 Notes</a>
-    </div>
-  </nav>
+    <h1>Representation Learning<br><em>The Foundation of Everything</em></h1>
+    <p class="tagline">
+      Every deep learning model — transformers, GNNs, diffusion models, LLMs — is, at its core, a <strong>representation learner</strong>. Before you can understand attention, contrastive loss, or RLHF, you need to deeply understand what a representation is, why it matters, and what makes one representation better than another.
+    </p>
+  </div>
 
-  <!-- Article -->
-  <article class="max-w-3xl mx-auto px-4 sm:px-6 py-14">
-
-    <!-- Header -->
-    <div class="mb-10">
-      <div class="flex flex-wrap gap-2 mb-4">
-        <span class="badge badge-naacl">🧠 Representation Learning</span>
-        <span class="badge badge-journal">📘 Deep Learning</span>
-      </div>
-      <h1 class="text-2xl sm:text-3xl font-bold text-slate-900 dark:text-white leading-tight mb-3">
-        Representation Learning: A Gentle Introduction
-      </h1>
-      <div class="flex items-center gap-3 text-xs text-slate-400 dark:text-slate-500">
-        <span>Md. Ayon Mia</span>
-        <span>·</span>
-        <span>April 2026</span>
-        <span>·</span>
-        <span>5 min read</span>
-      </div>
+  <!-- SECTION 1: WHAT IS REPRESENTATION -->
+  <div class="section" id="what-is-repr">
+    <div class="section-label">
+      <span class="section-num">01</span>
+      <h2>What Is a Representation?</h2>
     </div>
 
-    <!-- Content -->
-    <div class="prose">
+    <p>Let's start with something you already understand. Imagine you're trying to recognise whether an email is spam or not spam. The email is just a bunch of words. But words as raw text are useless to a machine — it can't do math on the word "lottery".</p>
 
-      <blockquote>
-        "The goal of representation learning is to find a transformation of the data that makes it easier to extract useful information for a given task."
-      </blockquote>
+    <p>So what do we do? We <strong>convert the email into numbers</strong>. Maybe we count how many times "free", "win", "click" appear. That list of numbers — <code>[3, 1, 5, 0, 2, ...]</code> — is a <strong>representation</strong> of the email.</p>
 
-      <h2>What is a Representation?</h2>
-      <p>
-        When we work with raw data — a sentence, an image, a user's click history — computers can't directly reason over the surface form. They need numbers. But not just <em>any</em> numbers: the representation should capture the <strong>structure and semantics</strong> of the input in a way that is useful for downstream tasks.
-      </p>
-      <p>
-        Think of the word <code>king</code>. You could represent it as its index in a vocabulary (say, <code>5421</code>). That number tells the model nothing about its meaning. But if you represent it as a high-dimensional vector where <code>king - man + woman ≈ queen</code>, suddenly the geometry of the space is encoding semantic relationships.
-      </p>
-      <p>
-        That is the magic of representation learning — finding vector spaces where <strong>proximity reflects meaning</strong>.
-      </p>
+    <div class="callout callout-intuition">
+      <span class="callout-label">Core Intuition</span>
+      <p>A <strong>representation</strong> is just a way of describing a real-world thing (image, text, node in a graph) as a list of numbers — a <em>vector</em> — so that a machine can reason about it mathematically.</p>
+    </div>
 
-      <h2>From One-Hot to Embeddings</h2>
-      <p>
-        The earliest NLP representations were <strong>one-hot vectors</strong>: a sparse binary vector with a 1 at the word's index and 0 everywhere else. These are orthogonal by construction — every word is equally distant from every other word. There is no way to encode that <em>cat</em> and <em>dog</em> are more similar than <em>cat</em> and <em>airplane</em>.
-      </p>
-      <p>
-        <strong>Word2Vec</strong> (Mikolov et al., 2013) changed this. By training a shallow neural network to predict surrounding words (CBOW) or to use a word to predict its context (Skip-gram), it learned dense low-dimensional vectors where semantically similar words cluster together. These <em>static embeddings</em> had a major limitation: a single fixed vector per word regardless of context. The word <em>bank</em> has the same vector whether you're talking about a river bank or a financial bank.
-      </p>
+    <p>This idea is so simple that it's easy to miss how profound it is. The entire field of deep learning is fundamentally about one question:</p>
 
-      <h2>Contextual Representations: The Transformer Era</h2>
-      <p>
-        <strong>ELMo</strong> (2018) was among the first to produce context-sensitive representations using bidirectional LSTMs. Then came the shift that changed everything: the <strong>Transformer architecture</strong> (Vaswani et al., 2017) with its self-attention mechanism.
-      </p>
-      <p>
-        <strong>BERT</strong> (Devlin et al., 2019) used Transformers pre-trained on masked language modelling (MLM) and next-sentence prediction (NSP). Crucially, BERT produces a <em>different</em> representation for each occurrence of a word depending on its full context. The model learned to encode rich syntactic and semantic structure by attending over all other tokens simultaneously.
-      </p>
+    <div class="key-takeaway">
+      <span class="kt-label">The Central Question</span>
+      <p>"What is the <em>best</em> way to represent a piece of data as numbers, so that useful patterns become easy to find?"</p>
+    </div>
+
+    <h3>A More Concrete Example</h3>
+
+    <p>Suppose you have three fruits: an apple, a banana, and a strawberry. How do you represent them as numbers?</p>
+
+    <p><strong>Option A — Arbitrary IDs:</strong> apple=1, banana=2, strawberry=3. This is terrible because it implies banana is "between" apple and strawberry, which is meaningless.</p>
+
+    <p><strong>Option B — Feature vector:</strong> Represent each fruit by [redness, sweetness, size]:</p>
+
+    <div class="diagram">
+      <span class="diagram-title">Feature Vector Representation</span>
+      <div class="pipeline">
+        <div class="pipe-box">
+          <span class="pipe-label">Apple</span>
+          <span class="pipe-val">[0.9, 0.7, 0.5]</span>
+        </div>
+        <div class="pipe-arrow">→</div>
+        <div class="pipe-box highlight">
+          <span class="pipe-label">Representation</span>
+          <span class="pipe-val">point in 3D space</span>
+        </div>
+      </div>
+      <div class="pipeline" style="margin-top:12px;">
+        <div class="pipe-box">
+          <span class="pipe-label">Strawberry</span>
+          <span class="pipe-val">[0.95, 0.8, 0.1]</span>
+        </div>
+        <div class="pipe-arrow">→</div>
+        <div class="pipe-box highlight">
+          <span class="pipe-label">Close to Apple!</span>
+          <span class="pipe-val">similar numbers</span>
+        </div>
+      </div>
+    </div>
+
+    <p>Notice: apple [0.9, 0.7, 0.5] and strawberry [0.95, 0.8, 0.1] are now <strong>close to each other as numbers</strong> because they're both red and sweet. This is what a good representation does — it captures real-world similarity as mathematical closeness.</p>
+  </div>
+
+  <hr class="section-divider">
+
+  <!-- SECTION 2: WHY IT MATTERS -->
+  <div class="section" id="why-it-matters">
+    <div class="section-label">
+      <span class="section-num">02</span>
+      <h2>Why Does Representation Matter So Much?</h2>
+    </div>
+
+    <div class="analogy-card">
+      <div class="analogy-icon">🗺️</div>
+      <div>
+        <span class="analogy-title">Analogy — The Map</span>
+        <div class="analogy-body">A map is a <em>representation</em> of the real world. A good map makes it easy to find a route. A bad map (say, one that distorts distances badly) makes navigation nearly impossible — even if all the cities are "there". The map hasn't changed the territory; it's changed how easy it is to reason about it. <strong>Representations work the same way.</strong></div>
+      </div>
+    </div>
+
+    <p>In machine learning, your model can only be as smart as the representation it starts with. Given a bad representation, even the most sophisticated model will struggle. Given a great representation, even a simple linear model can do remarkably well.</p>
+
+    <p>This is exactly why deep learning has been so transformative: <strong>deep neural networks learn representations automatically from data</strong>, instead of humans having to hand-craft them.</p>
+
+    <div class="callout callout-insight">
+      <span class="callout-label">Historical Insight</span>
+      <p>Before deep learning (pre-2012), ML engineers spent most of their time on <em>feature engineering</em> — manually designing representations. For images, this meant things like SIFT descriptors, HOG features, etc. Deep learning automated this process. Now the model learns what numbers to use.</p>
+    </div>
+  </div>
+
+  <hr class="section-divider">
+
+  <!-- SECTION 3: MANIFOLD HYPOTHESIS -->
+  <div class="section" id="manifold">
+    <div class="section-label">
+      <span class="section-num">03</span>
+      <h2>The Manifold Hypothesis</h2>
+    </div>
+
+    <p>Here's a puzzle. A typical image is 224×224 pixels with 3 color channels. That's <strong>224 × 224 × 3 = 150,528 numbers</strong> per image. Theoretically, "image space" has 150,528 dimensions.</p>
+
+    <p>But think about it: what fraction of all possible 150,528-dimensional vectors actually look like a real image of a cat? Almost none. Most random vectors look like pure static noise.</p>
+
+    <div class="callout callout-intuition">
+      <span class="callout-label">The Manifold Hypothesis</span>
+      <p>Real-world data (images, text, audio) — despite living in a very high-dimensional space — actually lies on or near a <strong>low-dimensional manifold</strong>. Meaningful variation in natural data only occupies a tiny corner of the full mathematical space.</p>
+    </div>
+
+    <div class="analogy-card">
+      <div class="analogy-icon">🌍</div>
+      <div>
+        <span class="analogy-title">Analogy — The Earth's Surface</span>
+        <div class="analogy-body">The Earth exists in 3D space (x, y, z coordinates). But almost all human activity happens on the surface — a 2D manifold embedded in 3D space. You can describe any city's location with just latitude and longitude (2 numbers), not a full 3D coordinate. <strong>The manifold hypothesis says real data is like this</strong> — it has much lower intrinsic dimensionality than it appears.</div>
+      </div>
+    </div>
+
+    <h3>Why This Matters for Learning</h3>
+
+    <p>If the data lies on a low-dimensional manifold, then a good representation should <strong>unfold that manifold</strong> — take the data from its complicated high-dimensional space and map it to a simple, flat, low-dimensional space where patterns are visible.</p>
+
+    <p>This is exactly what the encoder part of every neural network does. When you pass an image through ResNet or ViT, the early layers detect edges, then shapes, then parts of objects. Each layer is finding a better, more disentangled representation of the manifold the data lives on.</p>
+  </div>
+
+  <hr class="section-divider">
+
+  <!-- SECTION 4: GEOMETRIC VIEW -->
+  <div class="section" id="geometry">
+    <div class="section-label">
+      <span class="section-num">04</span>
+      <h2>The Geometric View: Embeddings as Points in Space</h2>
+    </div>
+
+    <p>This is the single most important mental model in all of deep learning. Let's build it carefully.</p>
+
+    <p>Every representation is a <strong>vector</strong> — an ordered list of numbers. A vector with n numbers lives in n-dimensional space. We call this a <strong>embedding space</strong> or <strong>latent space</strong>.</p>
+
+    <div class="diagram">
+      <span class="diagram-title">Representation = A Point in Space</span>
+      <div class="pipeline">
+        <div class="pipe-box">
+          <span class="pipe-label">Input</span>
+          <span class="pipe-val">The word "king"</span>
+        </div>
+        <div class="pipe-arrow">→</div>
+        <div class="pipe-box">
+          <span class="pipe-label">Encoder f(x)</span>
+          <span class="pipe-val">neural network</span>
+        </div>
+        <div class="pipe-arrow">→</div>
+        <div class="pipe-box highlight">
+          <span class="pipe-label">Embedding z</span>
+          <span class="pipe-val">[0.2, -0.8, 0.5, ...]</span>
+        </div>
+      </div>
+    </div>
+
+    <p>Once data is represented as points in space, <strong>geometry becomes meaningful</strong>:</p>
+
+    <table class="compare-table">
+      <tr>
+        <th>Geometric concept</th>
+        <th>What it means for representations</th>
+        <th>Example</th>
+      </tr>
+      <tr>
+        <td>Distance</td>
+        <td>How different two things are</td>
+        <td>"cat" and "dog" closer than "cat" and "airplane"</td>
+      </tr>
+      <tr>
+        <td>Direction</td>
+        <td>Captures relationships / attributes</td>
+        <td>king − man + woman ≈ queen (Word2Vec)</td>
+      </tr>
+      <tr>
+        <td>Cluster</td>
+        <td>Group of similar things</td>
+        <td>All animal embeddings cluster together</td>
+      </tr>
+      <tr>
+        <td>Linear separability</td>
+        <td>Whether classes can be split by a line</td>
+        <td>Good representations make classification easy</td>
+      </tr>
+    </table>
+
+    <div class="callout callout-insight">
+      <span class="callout-label">The Famous Word2Vec Result</span>
+      <p>In 2013, Mikolov et al. found that word embeddings trained on text had this property: <code>embedding("king") − embedding("man") + embedding("woman") ≈ embedding("queen")</code>. This wasn't programmed in — it <em>emerged</em> from learning good representations. This is why geometry in embedding space is so powerful.</p>
+    </div>
+
+    <h3>Similarity = Distance in Space</h3>
+
+    <p>The key insight: <strong>similar things should be close, dissimilar things should be far apart</strong>. This is how every modern model is trained — by shaping the embedding space so that meaningful structure is reflected in the geometry.</p>
+  </div>
+
+  <hr class="section-divider">
+
+  <!-- SECTION 5: MATH -->
+  <div class="section" id="math">
+    <div class="section-label">
+      <span class="section-num">05</span>
+      <h2>The Mathematics (From Scratch)</h2>
+    </div>
+
+    <p>Don't worry — we're going to build this from the very bottom. No prior math assumed.</p>
+
+    <h3>What Is a Vector?</h3>
+
+    <p>A vector is just an ordered list of numbers. That's it.</p>
+
+    <div class="math-block">
+      <span class="eq">x = [x₁, x₂, x₃, ..., xₙ]</span>
+      <span class="eq-label">A vector x with n components. Each xᵢ is a single number.</span>
+      <span class="eq" style="margin-top:14px;">Example: x = [0.2, -0.8, 0.5, 1.3]</span>
+      <span class="eq-label">This vector has 4 dimensions (n = 4). It represents a point in 4D space.</span>
+    </div>
+
+    <p>We say this vector <em>lives in</em> ℝⁿ — meaning the space of all n-dimensional real number vectors.</p>
+
+    <h3>The Dot Product: Measuring Similarity</h3>
+
+    <p>The most important operation on vectors. Take two vectors, multiply their components pair-by-pair, then add everything up:</p>
+
+    <div class="math-block">
+      <span class="eq">a · b = a₁b₁ + a₂b₂ + a₃b₃ + ... + aₙbₙ</span>
+      <span class="eq-label">The dot product of vectors a and b.</span>
+      <span class="eq" style="margin-top:14px;">Example:  a = [1, 2, 3],  b = [4, 5, 6]</span>
+      <span class="eq">a · b = (1×4) + (2×5) + (3×6) = 4 + 10 + 18 = 32</span>
+    </div>
+
+    <p>Why does this measure similarity? Because when two vectors point in the <em>same direction</em>, all the products aᵢbᵢ are large and positive, so the sum is large. When they point in <em>opposite directions</em>, the products are negative and the sum is small or negative.</p>
+
+    <h3>The Norm: Length of a Vector</h3>
+
+    <div class="math-block">
+      <span class="eq">‖x‖ = √(x₁² + x₂² + ... + xₙ²)</span>
+      <span class="eq-label">The L2 norm (Euclidean length) of vector x. This is just the Pythagorean theorem extended to n dimensions.</span>
+      <span class="eq" style="margin-top:14px;">Example:  x = [3, 4]</span>
+      <span class="eq">‖x‖ = √(3² + 4²) = √(9 + 16) = √25 = 5</span>
+    </div>
+
+    <h3>Cosine Similarity: The Gold Standard for Representation Similarity</h3>
+
+    <p>Raw dot products depend on the magnitude (length) of vectors — a very long vector will have a large dot product even with something dissimilar. We fix this by normalizing:</p>
+
+    <div class="math-block">
+      <span class="eq">cos_sim(a, b) = (a · b) / (‖a‖ × ‖b‖)</span>
+      <span class="eq-label">Cosine similarity. Always between -1 and +1.</span>
+      <span class="eq" style="margin-top:10px;">cos_sim = +1  →  vectors point in same direction (very similar)</span>
+      <span class="eq">cos_sim =  0  →  vectors are perpendicular (unrelated)</span>
+      <span class="eq">cos_sim = -1  →  vectors point in opposite directions (opposites)</span>
+    </div>
+
+    <div class="callout callout-math">
+      <span class="callout-label">Why Cosine Similarity?</span>
+      <p>In NLP and representation learning, we care about the <em>direction</em> a vector points, not its length. Two documents that are similar but one is much longer shouldn't be treated as different. Cosine similarity removes the length factor, leaving only directional similarity. This is why it's used everywhere — semantic search, contrastive learning, attention mechanisms.</p>
+    </div>
+
+    <h3>Euclidean Distance: How Far Apart Are Two Points?</h3>
+
+    <div class="math-block">
+      <span class="eq">dist(a, b) = ‖a − b‖ = √Σᵢ(aᵢ − bᵢ)²</span>
+      <span class="eq-label">The straight-line distance between points a and b in embedding space.</span>
+      <span class="eq" style="margin-top:14px;">Example:  a = [1, 2],  b = [4, 6]</span>
+      <span class="eq">dist = √((4-1)² + (6-2)²) = √(9 + 16) = √25 = 5</span>
+    </div>
+
+    <h3>The Representation Function</h3>
+
+    <p>A representation learning model is formally just a function fθ (parameterized by θ, meaning its learnable weights) that maps input x to embedding z:</p>
+
+    <div class="math-block">
+      <span class="eq">z = fθ(x)</span>
+      <span class="eq-label">The encoder function. x is your raw input (image pixels, text tokens, graph node features). z is the learned embedding. θ are the weights of the neural network.</span>
+      <span class="eq" style="margin-top:14px;">x ∈ ℝᵈ_input  →  z ∈ ℝᵈ_embed</span>
+      <span class="eq-label">Input dimension is usually large (e.g. 150528 for an image). Embedding dimension is small (e.g. 768 for BERT).</span>
+    </div>
+
+    <p>The goal of training is to find θ such that the function fθ produces embeddings z where <strong>similar inputs end up close together and dissimilar inputs end up far apart</strong>.</p>
+  </div>
+
+  <hr class="section-divider">
+
+  <!-- SECTION 6: LINEAR VS NON-LINEAR -->
+  <div class="section" id="linear-nonlinear">
+    <div class="section-label">
+      <span class="section-num">06</span>
+      <h2>Linear vs Non-Linear Representations</h2>
+    </div>
+
+    <h3>Linear: PCA</h3>
+
+    <p>The simplest representation learner is <strong>Principal Component Analysis (PCA)</strong>. It finds a low-dimensional linear subspace that captures most of the variance in the data.</p>
+
+    <div class="analogy-card">
+      <div class="analogy-icon">💡</div>
+      <div>
+        <span class="analogy-title">PCA Intuition</span>
+        <div class="analogy-body">Imagine you have data scattered in 3D space, but most of it lies roughly on a 2D plane (like a tilted sheet of paper). PCA finds that plane and projects all points onto it. You've gone from 3 numbers per point to 2 numbers, with minimal information loss. The two new axes it finds are called <strong>principal components</strong>.</div>
+      </div>
+    </div>
+
+    <p>PCA is powerful but limited: it can only find <strong>linear</strong> structure. If your data lies on a curved manifold (a spiral, a sphere), PCA can't unfold it properly.</p>
+
+    <h3>Non-Linear: Autoencoders and Neural Nets</h3>
+
+    <p>Neural networks can learn <strong>non-linear representations</strong> by stacking layers with non-linear activation functions. Each layer transforms the representation, gradually unfolding the complex manifold into something linearly separable.</p>
+
+    <div class="diagram">
+      <span class="diagram-title">Autoencoder: Learn to Compress → Decompress → The Bottleneck IS the Representation</span>
+      <div class="pipeline">
+        <div class="pipe-box">
+          <span class="pipe-label">Input</span>
+          <span class="pipe-val">x (784 dims)</span>
+        </div>
+        <div class="pipe-arrow">→</div>
+        <div class="pipe-box">
+          <span class="pipe-label">Encoder</span>
+          <span class="pipe-val">layers compress</span>
+        </div>
+        <div class="pipe-arrow">→</div>
+        <div class="pipe-box highlight">
+          <span class="pipe-label">Bottleneck z</span>
+          <span class="pipe-val">32 dims ← REPRESENTATION</span>
+        </div>
+        <div class="pipe-arrow">→</div>
+        <div class="pipe-box">
+          <span class="pipe-label">Decoder</span>
+          <span class="pipe-val">layers expand</span>
+        </div>
+        <div class="pipe-arrow">→</div>
+        <div class="pipe-box">
+          <span class="pipe-label">Reconstruction</span>
+          <span class="pipe-val">x̂ ≈ x</span>
+        </div>
+      </div>
+    </div>
+
+    <p>The autoencoder is forced to compress the input into a small bottleneck z, then reconstruct it. To do this well, z must capture the <em>essential structure</em> of the data — throwing away noise, keeping meaning. This bottleneck is the learned representation.</p>
+  </div>
+
+  <hr class="section-divider">
+
+  <!-- SECTION 7: WHAT IS GOOD REPRESENTATION -->
+  <div class="section" id="good-repr">
+    <div class="section-label">
+      <span class="section-num">07</span>
+      <h2>What Makes a Representation "Good"?</h2>
+    </div>
+
+    <p>This is actually a research-level question with no single answer. But there are properties that most researchers agree on:</p>
+
+    <table class="compare-table">
+      <tr>
+        <th>Property</th>
+        <th>What it means</th>
+        <th>Why it matters</th>
+      </tr>
+      <tr>
+        <td>Disentangled</td>
+        <td>Each dimension captures one independent factor (e.g., one axis = shape, another = color)</td>
+        <td>Easier to interpret, generalize, and manipulate</td>
+      </tr>
+      <tr>
+        <td>Compact</td>
+        <td>Low-dimensional — only uses the dimensions it needs</td>
+        <td>Avoids the curse of dimensionality</td>
+      </tr>
+      <tr>
+        <td>Invariant</td>
+        <td>Doesn't change under irrelevant transformations (e.g., rotating an image shouldn't change "cat" embedding)</td>
+        <td>Robustness, generalization</td>
+      </tr>
+      <tr>
+        <td>Transferable</td>
+        <td>Learned on one task, useful for other tasks</td>
+        <td>This is why pretrained models are so powerful</td>
+      </tr>
+      <tr>
+        <td>Linearly separable</td>
+        <td>Classes can be separated with a simple linear classifier on top</td>
+        <td>Proxy measure: if a linear probe works well, the representation is rich</td>
+      </tr>
+    </table>
+
+    <div class="callout callout-warning">
+      <span class="callout-label">Common Misconception</span>
+      <p>People often think "more dimensions = better representation." This is false. Too many dimensions leads to the <strong>curse of dimensionality</strong> — distances become meaningless, and models overfit. Good representations are as <em>compact as possible</em> while preserving the information needed for the task.</p>
+    </div>
+  </div>
+
+  <hr class="section-divider">
+
+  <!-- SECTION 8: CODE -->
+  <div class="section" id="code">
+    <div class="section-label">
+      <span class="section-num">08</span>
+      <h2>Code: See It In Action</h2>
+    </div>
+
+    <p>Let's implement the core concepts from scratch in Python. No fancy libraries needed — just NumPy.</p>
+
+    <div class="code-block">
+      <div class="code-header">
+        <span class="code-lang">Python · NumPy</span>
+        <span class="code-desc">Core vector operations for representation learning</span>
+      </div>
+      <pre><span class="kw">import</span> numpy <span class="kw">as</span> np
+
+<span class="cm"># ── 1. Create some simple representations ────────────────────────</span>
+<span class="cm"># Represent fruits as [redness, sweetness, size]</span>
+
+apple      = np.array([<span class="nm">0.9</span>, <span class="nm">0.7</span>, <span class="nm">0.5</span>])
+strawberry = np.array([<span class="nm">0.95</span>, <span class="nm">0.8</span>, <span class="nm">0.1</span>])
+banana     = np.array([<span class="nm">0.1</span>, <span class="nm">0.6</span>, <span class="nm">0.6</span>])
+lemon      = np.array([<span class="nm">0.05</span>, <span class="nm">0.2</span>, <span class="nm">0.4</span>])
+
+
+<span class="cm"># ── 2. Dot product ───────────────────────────────────────────────</span>
+<span class="kw">def</span> <span class="fn">dot_product</span>(a, b):
+    <span class="st">"""Multiply element-wise and sum. Measures raw similarity."""</span>
+    <span class="kw">return</span> np.<span class="fn">sum</span>(a * b)
+
+<span class="fn">print</span>(<span class="st">"Apple · Strawberry:"</span>, <span class="fn">dot_product</span>(apple, strawberry))  <span class="cm"># large (similar)</span>
+<span class="fn">print</span>(<span class="st">"Apple · Lemon:     "</span>, <span class="fn">dot_product</span>(apple, lemon))       <span class="cm"># smaller</span>
+
+
+<span class="cm"># ── 3. L2 Norm (vector length) ───────────────────────────────────</span>
+<span class="kw">def</span> <span class="fn">norm</span>(v):
+    <span class="st">"""Euclidean length of a vector: sqrt(x1² + x2² + ...)"""</span>
+    <span class="kw">return</span> np.<span class="fn">sqrt</span>(np.<span class="fn">sum</span>(v ** <span class="nm">2</span>))
+
+<span class="fn">print</span>(<span class="st">"\nApple norm:  "</span>, <span class="fn">norm</span>(apple))
+
+
+<span class="cm"># ── 4. Cosine Similarity ─────────────────────────────────────────</span>
+<span class="kw">def</span> <span class="fn">cosine_similarity</span>(a, b):
+    <span class="st">"""
+    Normalize both vectors, then take dot product.
+    Result always in [-1, +1].
+    +1 = identical direction, 0 = perpendicular, -1 = opposite
+    """</span>
+    <span class="kw">return</span> <span class="fn">dot_product</span>(a, b) / (<span class="fn">norm</span>(a) * <span class="fn">norm</span>(b))
+
+<span class="fn">print</span>(<span class="st">"\nCosine Similarities:"</span>)
+<span class="fn">print</span>(<span class="st">f"Apple ↔ Strawberry: {<span class="fn">cosine_similarity</span>(apple, strawberry):.4f}"</span>)  <span class="cm"># should be high</span>
+<span class="fn">print</span>(<span class="st">f"Apple ↔ Banana:     {<span class="fn">cosine_similarity</span>(apple, banana):.4f}"</span>)
+<span class="fn">print</span>(<span class="st">f"Apple ↔ Lemon:      {<span class="fn">cosine_similarity</span>(apple, lemon):.4f}"</span>)   <span class="cm"># should be low</span>
+
+
+<span class="cm"># ── 5. Euclidean Distance ────────────────────────────────────────</span>
+<span class="kw">def</span> <span class="fn">euclidean_distance</span>(a, b):
+    <span class="st">"""Straight-line distance between two points in embedding space."""</span>
+    <span class="kw">return</span> <span class="fn">norm</span>(a - b)
+
+<span class="fn">print</span>(<span class="st">"\nEuclidean Distances from Apple:"</span>)
+<span class="fn">print</span>(<span class="st">f"Apple → Strawberry: {<span class="fn">euclidean_distance</span>(apple, strawberry):.4f}"</span>)  <span class="cm"># close</span>
+<span class="fn">print</span>(<span class="st">f"Apple → Lemon:      {<span class="fn">euclidean_distance</span>(apple, lemon):.4f}"</span>)      <span class="cm"># far</span>
+
+
+<span class="cm"># ── 6. Simple Neural Network Encoder (representation learner) ───</span>
+<span class="kw">import</span> torch
+<span class="kw">import</span> torch.nn <span class="kw">as</span> nn
+
+<span class="kw">class</span> <span class="tp">SimpleEncoder</span>(nn.<span class="tp">Module</span>):
+    <span class="st">"""
+    A minimal encoder: maps high-dim input to low-dim representation.
+    This is the core of every representation learning model.
+    """</span>
+    <span class="kw">def</span> <span class="fn">__init__</span>(self, input_dim, embed_dim):
+        <span class="fn">super</span>().<span class="fn">__init__</span>()
+        self.encoder = nn.<span class="tp">Sequential</span>(
+            nn.<span class="tp">Linear</span>(input_dim, <span class="nm">128</span>),   <span class="cm"># layer 1: compress</span>
+            nn.<span class="tp">ReLU</span>(),                     <span class="cm"># non-linearity (Day 4 topic)</span>
+            nn.<span class="tp">Linear</span>(<span class="nm">128</span>, embed_dim),    <span class="cm"># layer 2: compress more</span>
+        )
+    
+    <span class="kw">def</span> <span class="fn">forward</span>(self, x):
+        z = self.encoder(x)              <span class="cm"># z is the representation</span>
+        z = nn.functional.<span class="fn">normalize</span>(z, dim=-<span class="nm">1</span>)  <span class="cm"># unit-normalize for cosine sim</span>
+        <span class="kw">return</span> z
+
+<span class="cm"># Example: 784-dim input (e.g., MNIST image) → 32-dim representation</span>
+encoder = <span class="tp">SimpleEncoder</span>(input_dim=<span class="nm">784</span>, embed_dim=<span class="nm">32</span>)
+
+x1 = torch.<span class="fn">randn</span>(<span class="nm">1</span>, <span class="nm">784</span>)  <span class="cm"># fake image 1</span>
+x2 = torch.<span class="fn">randn</span>(<span class="nm">1</span>, <span class="nm">784</span>)  <span class="cm"># fake image 2</span>
+
+z1 = encoder(x1)  <span class="cm"># shape: [1, 32] — the learned representation</span>
+z2 = encoder(x2)
+
+sim = (z1 * z2).<span class="fn">sum</span>()  <span class="cm"># cosine similarity (vectors are normalized)</span>
+<span class="fn">print</span>(<span class="st">f"\nRandom encoder similarity: {sim.item():.4f}"</span>)
+<span class="fn">print</span>(<span class="st">f"Embedding shape: {z1.shape}"</span>)  <span class="cm"># [1, 32]</span>
+<span class="fn">print</span>(<span class="st">"This is the representation. 784 numbers → 32 numbers."</span>)</pre>
+    </div>
+
+    <div class="callout callout-insight">
+      <span class="callout-label">What To Notice In The Code</span>
+      <p>The <code>SimpleEncoder</code> class above has the exact same structure as the encoder in BERT, CLIP, SimCLR — they're all just deeper, wider versions of the same idea: <em>map input to a smaller vector that captures meaning</em>. The sophistication comes from how you <strong>train</strong> this encoder (what loss function you use), not its architecture.</p>
+    </div>
+  </div>
+
+  <hr class="section-divider">
+
+  <hr class="section-divider">
+
+  <!-- BLOG SUMMARY -->
+  <div class="section" id="summary">
+    <div class="section-label">
+      <span class="section-num">10</span>
+      <h2>Blog Post Summary</h2>
+    </div>
+    <p style="color:var(--muted); font-size:13.5px; font-family:'JetBrains Mono',monospace; margin-bottom:24px;">// copy-paste ready for your blog. customize as needed.</p>
+
+    <div class="blog-summary">
+      <div class="bs-header">
+        <div class="bs-icon">📝</div>
+        <div>
+          <div class="bs-title">Representation Learning — The Foundation of All Deep Learning</div>
+        </div>
+      </div>
       <ul>
-        <li><strong>BERT</strong>: Bidirectional encoder, strong at understanding tasks (classification, NER, QA)</li>
-        <li><strong>GPT family</strong>: Autoregressive decoder, strong at generation tasks</li>
-        <li><strong>XLM-RoBERTa</strong>: Multilingual BERT variant, handles 100+ languages — central to my own research on low-resource NLP</li>
+        <li><strong>A representation is a list of numbers (vector)</strong> that describes a real-world object in a way a machine can reason about mathematically.</li>
+        <li><strong>The goal of representation learning</strong> is to find a function fθ(x) = z that maps raw inputs to vectors where <em>similar things are close and dissimilar things are far apart</em> in vector space.</li>
+        <li><strong>The Manifold Hypothesis</strong> says that real data (images, text, graphs) lives on a low-dimensional curved surface inside a high-dimensional space. Good representations "unfold" this surface.</li>
+        <li><strong>Key math:</strong> dot product (raw similarity), L2 norm (vector length), cosine similarity (normalized, directional similarity = the gold standard), Euclidean distance (geometric separation).</li>
+        <li><strong>Linear representations (PCA)</strong> find flat subspaces. <strong>Non-linear representations (neural networks)</strong> can unfold curved manifolds — this is their superpower.</li>
+        <li><strong>A good representation</strong> is disentangled (each dimension = one factor), compact, invariant to irrelevant transformations, and transferable to new tasks.</li>
+        <li><strong>Every major model</strong> (BERT, GPT, CLIP, SimCLR) is fundamentally the same structure: an encoder fθ that maps inputs to a useful vector space.</li>
       </ul>
-
-      <h2>Why Does This Matter for Low-Resource NLP?</h2>
-      <p>
-        For languages like Bangla, Tamil, or Malayalam — where labelled data is scarce — the quality of representations is everything. Pre-trained multilingual models like XLM-RoBERTa encode cross-lingual knowledge acquired from large multilingual corpora. By fine-tuning on a small labelled dataset in a low-resource language, we transfer the rich representations learned from higher-resource languages.
-      </p>
-      <p>
-        Much of my research explores how to extract, combine, and adapt these representations for tasks like sentiment analysis, misogyny detection, and fake news classification in Bangla and Dravidian languages. Feature fusion strategies — pooling CLS tokens, mean-pooling token embeddings, CNN over token sequences — are different ways of summarising what the model has learned into a single fixed-size vector useful for classification.
-      </p>
-
-      <h2>Key Takeaways</h2>
-      <ul>
-        <li>A representation is a mapping from raw input to a vector space designed to preserve useful structure.</li>
-        <li>Learning good representations often makes downstream tasks dramatically easier.</li>
-        <li>Pre-training on large corpora and fine-tuning on task-specific data is the dominant paradigm in NLP today.</li>
-        <li>For low-resource languages, leveraging multilingual pre-trained models is the most effective strategy available.</li>
-      </ul>
-
-      <h2>Further Reading</h2>
-      <ul>
-        <li>Mikolov et al. (2013) — <em>Distributed Representations of Words and Phrases</em></li>
-        <li>Devlin et al. (2019) — <em>BERT: Pre-training of Deep Bidirectional Transformers</em></li>
-        <li>Conneau et al. (2020) — <em>Unsupervised Cross-lingual Representation Learning at Scale (XLM-R)</em></li>
-        <li>Bengio et al. (2013) — <em>Representation Learning: A Review and New Perspectives</em></li>
-      </ul>
-
     </div>
+  </div>
 
-    <div class="mt-12 pt-8 border-t border-slate-200 dark:border-slate-800">
-      <a href="index.html" class="text-sm font-medium text-indigo-600 dark:text-indigo-400 hover:underline">← Back to Notes</a>
-    </div>
-  </article>
+</main>
 
-  <script src="../assets/js/main.js"></script>
+<script>
+// Active TOC highlight on scroll
+const sections = document.querySelectorAll('[id]');
+const links = document.querySelectorAll('.toc a');
+
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      links.forEach(l => l.classList.remove('active'));
+      const active = document.querySelector(`.toc a[href="#${entry.target.id}"]`);
+      if (active) active.classList.add('active');
+    }
+  });
+}, { rootMargin: '-20% 0px -70% 0px' });
+
+sections.forEach(s => observer.observe(s));
+</script>
 </body>
 </html>
+
+
+
+
