@@ -1165,7 +1165,7 @@ lemon      = np.array([<span class="nm">0.05</span>, <span class="nm">0.2</span>
         <span class="fn">super</span>().<span class="fn">__init__</span>()
         self.encoder = nn.<span class="tp">Sequential</span>(
             nn.<span class="tp">Linear</span>(input_dim, <span class="nm">128</span>),   <span class="cm"># layer 1: compress</span>
-            nn.<span class="tp">ReLU</span>(),                     <span class="cm"># non-linearity (Day 4 topic)</span>
+            nn.<span class="tp">ReLU</span>(),                     <span class="cm"># non-linearity</span>
             nn.<span class="tp">Linear</span>(<span class="nm">128</span>, embed_dim),    <span class="cm"># layer 2: compress more</span>
         )
     
@@ -1205,7 +1205,6 @@ sim = (z1 * z2).<span class="fn">sum</span>()  <span class="cm"># cosine similar
       <span class="section-num">10</span>
       <h2>Blog Post Summary</h2>
     </div>
-    <p style="color:var(--muted); font-size:13.5px; font-family:'JetBrains Mono',monospace; margin-bottom:24px;">// copy-paste ready for your blog. customize as needed.</p>
 
     <div class="blog-summary">
       <div class="bs-header">
