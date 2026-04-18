@@ -1,0 +1,1189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Why Log, Softmax & Likelihood</title>
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;0,700;1,400;1,600&family=JetBrains+Mono:wght@300;400;500;600&family=Instrument+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0e0f13;
+  --surf: #14151a;
+  --surf2: #1c1d24;
+  --border: rgba(255,255,255,0.07);
+  --text: #e8e6e0;
+  --muted: #7a7870;
+  --green: #3ecb8e;
+  --amber: #f0a020;
+  --red: #e05555;
+  --blue: #5b9cf6;
+  --purple: #a07ef5;
+  --code-bg: #090a0d;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior:smooth; }
+body { background:var(--bg); color:var(--text); font-family:'Instrument Sans',sans-serif; font-size:16px; line-height:1.78; }
+
+/* TOC */
+.toc { position:fixed; left:0; top:0; bottom:0; width:214px; background:var(--surf); border-right:1px solid var(--border); padding:40px 0; overflow-y:auto; z-index:100; }
+.toc-brand { padding:0 20px 22px; border-bottom:1px solid var(--border); margin-bottom:16px; }
+.toc-series { font-family:'JetBrains Mono',monospace; font-size:9px; letter-spacing:.2em; text-transform:uppercase; color:var(--amber); display:block; margin-bottom:3px; }
+.toc-day { font-size:13px; font-weight:600; color:var(--text); }
+.toc a { display:block; padding:6px 20px; font-size:12.5px; color:var(--muted); text-decoration:none; border-left:2px solid transparent; transition:color .15s,background .15s; }
+.toc a:hover { color:var(--text); background:rgba(255,255,255,.03); }
+.toc a.on { color:var(--amber); border-left-color:var(--amber); background:rgba(240,160,32,.05); }
+.toc-sect { font-family:'JetBrains Mono',monospace; font-size:8px; letter-spacing:.18em; text-transform:uppercase; color:rgba(122,120,112,.4); padding:18px 20px 5px; }
+
+/* LAYOUT */
+.wrap { margin-left:214px; max-width:800px; padding:0 52px 120px; }
+
+/* HERO */
+.hero { padding:70px 0 54px; border-bottom:1px solid var(--border); margin-bottom:62px; position:relative; overflow:hidden; }
+.hero::before { content:''; position:absolute; inset:0; background:radial-gradient(ellipse 70% 50% at 20% 60%, rgba(240,160,32,.05) 0%, transparent 70%); pointer-events:none; }
+.meta { display:flex; gap:10px; flex-wrap:wrap; margin-bottom:22px; }
+.badge { font-family:'JetBrains Mono',monospace; font-size:10px; letter-spacing:.13em; text-transform:uppercase; padding:4px 10px; border-radius:3px; }
+.b-day  { background:rgba(62,203,142,.12); color:var(--green); border:1px solid rgba(62,203,142,.28); }
+.b-lv   { background:rgba(240,160,32,.1); color:var(--amber); border:1px solid rgba(240,160,32,.22); }
+.b-rd   { background:rgba(255,255,255,.05); color:var(--muted); border:1px solid var(--border); }
+.hero h1 { font-family:'Lora',serif; font-size:clamp(30px,5vw,50px); font-weight:700; line-height:1.13; letter-spacing:-.02em; color:#fff; margin-bottom:16px; }
+.hero h1 em { font-style:italic; color:var(--amber); }
+.tagline { font-size:17px; color:var(--muted); max-width:600px; line-height:1.65; font-weight:300; }
+.tagline strong { color:var(--text); font-weight:500; }
+
+/* SECTIONS */
+.sec { margin-bottom:68px; }
+.sec-lbl { display:flex; align-items:center; gap:12px; margin-bottom:26px; }
+.sec-num { font-family:'JetBrains Mono',monospace; font-size:11px; font-weight:600; color:var(--green); background:rgba(62,203,142,.1); border:1px solid rgba(62,203,142,.2); padding:3px 9px; border-radius:3px; letter-spacing:.1em; }
+.sec h2 { font-family:'Lora',serif; font-size:26px; font-weight:700; color:#fff; letter-spacing:-.01em; line-height:1.22; }
+.sec h3 { font-family:'Instrument Sans',sans-serif; font-size:18px; font-weight:600; color:var(--text); margin:34px 0 12px; display:flex; align-items:center; gap:10px; }
+.sec h3::before { content:''; display:block; width:3px; height:18px; background:var(--blue); border-radius:2px; flex-shrink:0; }
+p { margin-bottom:16px; color:var(--text); font-weight:300; }
+p strong { font-weight:600; color:#fff; }
+p em { color:var(--amber); font-style:italic; }
+hr.div { border:none; border-top:1px solid var(--border); margin:56px 0; }
+
+/* CALLOUTS */
+.box { border-radius:8px; padding:20px 24px; margin:26px 0; border-left:3px solid; }
+.box p { margin-bottom:8px; font-size:14.5px; }
+.box p:last-child { margin-bottom:0; }
+.box-lbl { font-family:'JetBrains Mono',monospace; font-size:9px; font-weight:600; letter-spacing:.18em; text-transform:uppercase; display:block; margin-bottom:10px; }
+.int { background:rgba(240,160,32,.07); border-color:var(--amber); } .int .box-lbl { color:var(--amber); }
+.mth { background:rgba(91,156,246,.07); border-color:var(--blue); }  .mth .box-lbl { color:var(--blue); }
+.ins { background:rgba(62,203,142,.07); border-color:var(--green); } .ins .box-lbl { color:var(--green); }
+.warn{ background:rgba(224,85,85,.07); border-color:var(--red); }    .warn .box-lbl { color:var(--red); }
+
+/* MATH */
+.math { background:var(--code-bg); border:1px solid var(--border); border-radius:8px; padding:22px 26px; margin:22px 0; overflow-x:auto; position:relative; }
+.math::before { content:'MATH'; position:absolute; top:9px; right:13px; font-family:'JetBrains Mono',monospace; font-size:8px; letter-spacing:.2em; color:rgba(91,156,246,.35); }
+.eq { font-family:'JetBrains Mono',monospace; font-size:14.5px; color:#c4c0f0; line-height:2.1; display:block; }
+.eqlb { font-size:12px; color:var(--muted); margin-top:4px; display:block; font-weight:300; }
+
+/* CODE */
+.code { background:var(--code-bg); border:1px solid var(--border); border-radius:8px; overflow:hidden; margin:22px 0; }
+.code-hd { display:flex; justify-content:space-between; align-items:center; padding:9px 17px; background:rgba(255,255,255,.025); border-bottom:1px solid var(--border); }
+.code-lang { font-family:'JetBrains Mono',monospace; font-size:10px; font-weight:600; letter-spacing:.12em; text-transform:uppercase; color:var(--green); }
+.code-desc { font-family:'JetBrains Mono',monospace; font-size:10px; color:var(--muted); }
+pre { padding:20px 22px; overflow-x:auto; font-family:'JetBrains Mono',monospace; font-size:13px; line-height:1.82; color:#c0bdb5; }
+.kw{color:#f0a020}.fn{color:#3ecb8e}.st{color:#a8d870}.cm{color:#3e424e;font-style:italic}.nm{color:#5b9cf6}.tp{color:#e05555}
+
+/* ANALOGY */
+.analogy { background:var(--surf2); border:1px solid var(--border); border-radius:10px; padding:26px; margin:26px 0; display:grid; grid-template-columns:46px 1fr; gap:18px; align-items:start; }
+.analogy-ico { font-size:34px; line-height:1; }
+.analogy-tag { font-family:'JetBrains Mono',monospace; font-size:9px; font-weight:600; letter-spacing:.18em; text-transform:uppercase; color:var(--amber); display:block; margin-bottom:7px; }
+.analogy-body { font-size:14.5px; color:var(--text); line-height:1.65; font-weight:300; }
+
+/* FIGURE */
+.fig { background:var(--surf); border:1px solid var(--border); border-radius:10px; overflow:hidden; margin:28px 0; }
+.fig-cap { font-family:'JetBrains Mono',monospace; font-size:10.5px; color:var(--muted); padding:10px 18px; border-top:1px solid var(--border); text-align:center; }
+
+/* COMPARISON TABLE */
+.tbl { width:100%; border-collapse:collapse; margin:22px 0; font-size:14px; }
+.tbl th { text-align:left; padding:10px 14px; font-family:'JetBrains Mono',monospace; font-size:9.5px; letter-spacing:.12em; text-transform:uppercase; color:var(--muted); border-bottom:1px solid var(--border); font-weight:400; }
+.tbl td { padding:12px 14px; border-bottom:1px solid rgba(255,255,255,.04); font-weight:300; vertical-align:top; line-height:1.5; }
+.tbl tr:hover td { background:rgba(255,255,255,.02); }
+.tbl td:first-child { font-weight:600; color:var(--green); font-family:'JetBrains Mono',monospace; font-size:13px; }
+
+/* KTA */
+.kta { background:linear-gradient(135deg,rgba(62,203,142,.08),rgba(91,156,246,.08)); border:1px solid rgba(62,203,142,.18); border-radius:10px; padding:26px 30px; margin:38px 0; }
+.kta-lbl { font-family:'JetBrains Mono',monospace; font-size:9px; font-weight:600; letter-spacing:.2em; text-transform:uppercase; color:var(--green); display:block; margin-bottom:11px; }
+.kta p { font-family:'Lora',serif; font-size:17px; line-height:1.6; font-style:italic; margin:0; }
+
+/* STEP LIST */
+.steps { display:flex; flex-direction:column; gap:0; margin:22px 0; }
+.step { display:grid; grid-template-columns:28px 1fr; gap:14px; padding:14px 0; border-bottom:1px solid var(--border); }
+.step:last-child { border-bottom:none; }
+.step-n { font-family:'JetBrains Mono',monospace; font-size:12px; font-weight:600; color:var(--amber); background:rgba(240,160,32,.1); border:1px solid rgba(240,160,32,.2); border-radius:3px; width:26px; height:26px; display:flex; align-items:center; justify-content:center; flex-shrink:0; margin-top:2px; }
+.step-body { font-size:14.5px; font-weight:300; line-height:1.6; }
+.step-title { font-weight:600; color:#fff; font-size:15px; margin-bottom:4px; }
+
+/* COMPARISON GRID */
+.cmp-grid { display:grid; grid-template-columns:1fr 1fr; gap:16px; margin:22px 0; }
+.cmp-card { background:var(--surf2); border:1px solid var(--border); border-radius:8px; padding:20px; }
+.cmp-title { font-family:'JetBrains Mono',monospace; font-size:10px; font-weight:600; letter-spacing:.14em; text-transform:uppercase; margin-bottom:12px; display:block; }
+.cmp-item { font-size:13.5px; font-weight:300; line-height:1.6; padding-left:14px; position:relative; margin-bottom:6px; }
+.cmp-item::before { content:'→'; position:absolute; left:0; color:var(--muted); font-size:11px; top:2px; }
+
+/* INTERACTIVE */
+.explorer { background:var(--surf2); border:1px solid var(--border); border-radius:10px; padding:28px; margin:28px 0; }
+.explorer-title { font-family:'JetBrains Mono',monospace; font-size:9px; letter-spacing:.18em; text-transform:uppercase; color:var(--muted); margin-bottom:18px; display:block; }
+.sl-row { display:flex; align-items:center; gap:14px; margin-bottom:16px; }
+.sl-row label { font-size:13px; color:var(--muted); white-space:nowrap; }
+.sl-row input[type=range] { flex:1; accent-color:var(--green); }
+.sl-row .val { font-family:'JetBrains Mono',monospace; font-size:14px; color:var(--green); min-width:50px; text-align:right; }
+.out-grid { display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-top:4px; }
+.out-c { background:var(--surf); border:1px solid var(--border); border-radius:6px; padding:14px 16px; }
+.out-lbl { font-family:'JetBrains Mono',monospace; font-size:9px; letter-spacing:.14em; text-transform:uppercase; color:var(--muted); display:block; margin-bottom:6px; }
+.out-val { font-size:22px; font-weight:600; font-family:'JetBrains Mono',monospace; }
+.out-note { font-size:12px; color:var(--muted); margin-top:4px; }
+
+/* GRADIENT VISUAL */
+.grad-table { width:100%; border-collapse:collapse; margin:18px 0; font-family:'JetBrains Mono',monospace; font-size:13px; }
+.grad-table th { text-align:center; padding:8px 12px; font-size:9px; letter-spacing:.12em; text-transform:uppercase; color:var(--muted); border-bottom:1px solid var(--border); font-weight:400; }
+.grad-table td { text-align:center; padding:10px 12px; border-bottom:1px solid rgba(255,255,255,.04); }
+.grad-pos { color:var(--red); } .grad-neg { color:var(--green); }
+
+/* BLOG */
+.blog { background:var(--surf2); border:1px solid var(--border); border-radius:10px; padding:30px; margin:46px 0; }
+.blog-hd { display:flex; align-items:center; gap:12px; margin-bottom:18px; padding-bottom:14px; border-bottom:1px solid var(--border); }
+.blog-ico { width:34px; height:34px; background:rgba(62,203,142,.1); border-radius:8px; display:flex; align-items:center; justify-content:center; font-size:17px; flex-shrink:0; }
+.blog-title { font-size:14px; font-weight:600; color:#fff; }
+.blog-sub { font-size:11px; color:var(--muted); font-family:'JetBrains Mono',monospace; }
+.blog ul { list-style:none; display:flex; flex-direction:column; gap:9px; }
+.blog li { font-size:14px; color:var(--text); padding-left:20px; position:relative; line-height:1.55; font-weight:300; }
+.blog li::before { content:'✓'; position:absolute; left:0; color:var(--green); font-size:13px; font-weight:600; }
+
+/* QUIZ */
+.quiz { background:var(--surf2); border:1px solid var(--border); border-radius:10px; padding:26px; margin:22px 0; }
+.quiz-lbl { font-family:'JetBrains Mono',monospace; font-size:9px; letter-spacing:.2em; text-transform:uppercase; color:var(--red); display:block; margin-bottom:12px; }
+.quiz-q { font-size:15px; font-weight:500; color:#fff; margin-bottom:7px; }
+.quiz-hint { font-size:13px; color:var(--muted); font-family:'JetBrains Mono',monospace; font-style:italic; }
+
+@media(max-width:900px){ .toc{display:none} .wrap{margin-left:0;padding:0 20px 80px} .cmp-grid{grid-template-columns:1fr} .out-grid{grid-template-columns:1fr} }
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<nav class="toc">
+  <div class="toc-brand">
+    <!-- <span class="toc-series">Deep ML Series</span>
+    <div class="toc-day">Day 2 of 28</div> -->
+  </div>
+  <div class="toc-sect">Contents</div>
+  <a href="#intro" class="on">Introduction</a>
+  <a href="#probability">What is Probability?</a>
+  <a href="#likelihood">What is Likelihood?</a>
+  <a href="#prob-vs-like">Probability vs Likelihood</a>
+  <a href="#coin-story">The Coin Story</a>
+  <a href="#why-log">Why the Log Function?</a>
+  <a href="#mle">Maximum Likelihood</a>
+  <a href="#softmax">Softmax</a>
+  <a href="#temperature">Temperature</a>
+  <a href="#crossent">Cross-Entropy Loss</a>
+  <a href="#summation">The Summation Role</a>
+  <a href="#kl">KL Divergence</a>
+  <a href="#gradient">Gradient of CE Loss</a>
+  <a href="#softmax-deriv">Softmax Derivative</a>
+  <a href="#everything">Full Picture</a>
+  <a href="#code">Code</a>
+  <a href="#summary">Blog Summary</a>
+</nav>
+
+<main class="wrap">
+
+<!-- HERO -->
+<div class="hero" id="intro">
+  <div class="meta">
+    <!-- <span class="badge b-day">Day 02 / 28</span>
+    <span class="badge b-lv">From Zero — No Math Assumed</span>
+    <span class="badge b-rd">~50 min read</span> -->
+  </div>
+  <h1>Why Log, Softmax &amp; <em>Likelihood</em></h1>
+  <p class="tagline">
+    Every loss function in deep learning — cross-entropy, NLL, contrastive loss, DPO, CLIP — is secretly the same idea repeated. Once you understand <strong>why we use probability, what likelihood truly means, and why we take its log</strong>, every loss function will click immediately.
+  </p>
+</div>
+
+<!-- ═══ 01: PROBABILITY ═══ -->
+<div class="sec" id="probability">
+  <div class="sec-lbl"><span class="sec-num">01</span><h2>What Is Probability?</h2></div>
+
+  <p>A probability is a number between 0 and 1 expressing how likely something is. <strong>0 means impossible. 1 means certain.</strong> The golden rule: all probabilities of possible outcomes must add up to exactly 1.</p>
+
+  <div class="analogy">
+    <div class="analogy-ico">🎲</div>
+    <div>
+      <span class="analogy-tag">The Coin Toss</span>
+      <div class="analogy-body">Flip a fair coin. P(Heads) = 0.5, P(Tails) = 0.5. Sum = 1.0. Every outcome gets a slice of the pie. The full pie is always exactly 1. In classification, this pie is split among all classes: P(cat) + P(dog) + P(car) = 1.0 always.</div>
+    </div>
+  </div>
+
+  <p>In machine learning, the model outputs a <strong>probability distribution over classes</strong> — a list of probabilities that sum to 1, telling you how confident the model is about each possibility.</p>
+
+  <div class="math">
+    <span class="eq">P(cat) = 0.70</span>
+    <span class="eq">P(dog) = 0.20</span>
+    <span class="eq">P(car) = 0.10</span>
+    <span class="eq">———————————</span>
+    <span class="eq">Sum    = 1.00  ✓</span>
+    <span class="eqlb">A valid probability distribution. Raw neural network outputs (logits) are NOT probabilities yet — that is what Softmax fixes.</span>
+  </div>
+</div>
+
+<hr class="div">
+
+<!-- ═══ 02: LIKELIHOOD ═══ -->
+<div class="sec" id="likelihood">
+  <div class="sec-lbl"><span class="sec-num">02</span><h2>What Is Likelihood? — The Most Important Concept</h2></div>
+
+  <p>Likelihood and probability use the same formula, but they ask completely different questions. This distinction is one of the most important in all of machine learning.</p>
+
+  <div class="box int">
+    <span class="box-lbl">The Core Question Likelihood Answers</span>
+    <p><strong>Probability asks:</strong> "Given this model, how likely is this data?"</p>
+    <p><strong>Likelihood asks:</strong> "Given this data, how well does this model explain it?"</p>
+  </div>
+
+  <p>More formally — likelihood measures: <em>"How good is my model at explaining the data I actually observed?"</em></p>
+
+  <div class="analogy">
+    <div class="analogy-ico">🕵️</div>
+    <div>
+      <span class="analogy-tag">Detective Analogy</span>
+      <div class="analogy-body">A detective arrives at a crime scene (the observed data is fixed). They consider three suspects (three different models/parameters). The best suspect is the one whose known behaviour most <em>likely</em> would have produced this crime scene. The detective doesn't change the evidence — they change their hypothesis until one fits best. <strong>That search for the best-fitting hypothesis is Maximum Likelihood Estimation.</strong></div>
+    </div>
+  </div>
+
+  <h3>Formal Definition</h3>
+  <p>Given a dataset of N examples with inputs x and labels y:</p>
+
+  <div class="math">
+    <span class="eq">Likelihood(θ) = ∏ᵢ P(yᵢ | xᵢ; θ)</span>
+    <span class="eqlb">The product of the probability of each correct label, given model parameters θ. We treat this as a function of θ (the model), with the data held fixed.</span>
+    <span class="eq" style="margin-top:14px;">Log-Likelihood(θ) = Σᵢ log P(yᵢ | xᵢ; θ)</span>
+    <span class="eqlb">Taking log converts the product into a sum — numerically stable, easier to optimize.</span>
+  </div>
+
+  <h3>Binary Classification Example</h3>
+  <p>Suppose you have a model and three data points:</p>
+
+  <table class="tbl">
+    <tr><th>Input</th><th>True Label y</th><th>Model P(y=1|x)</th><th>Probability Used</th></tr>
+    <tr><td>x₁</td><td>1 (positive)</td><td>0.9</td><td>P(y=1) = 0.9</td></tr>
+    <tr><td>x₂</td><td>0 (negative)</td><td>0.2</td><td>P(y=0) = 1−0.2 = 0.8</td></tr>
+    <tr><td>x₃</td><td>1 (positive)</td><td>0.8</td><td>P(y=1) = 0.8</td></tr>
+  </table>
+
+  <div class="math">
+    <span class="eq">Likelihood = 0.9 × 0.8 × 0.8 = 0.576</span>
+    <span class="eqlb">High likelihood → the model's predictions match the true labels well.</span>
+    <span class="eq" style="margin-top:12px;">Log-Likelihood = log(0.9) + log(0.8) + log(0.8) ≈ −0.105 − 0.223 − 0.223 = −0.551</span>
+    <span class="eqlb">The log version is easier to work with computationally and mathematically.</span>
+  </div>
+
+  <div class="box ins">
+    <span class="box-lbl">Important Pattern</span>
+    <p>When true label y=1, use P(y=1|x) directly. When true label y=0, use 1−P(y=1|x). This ensures you always measure the probability of the <em>correct</em> label.</p>
+  </div>
+</div>
+
+<hr class="div">
+
+<!-- ═══ 03: PROB VS LIKELIHOOD ═══ -->
+<div class="sec" id="prob-vs-like">
+  <div class="sec-lbl"><span class="sec-num">03</span><h2>Probability vs Likelihood — Side by Side</h2></div>
+
+  <p>Same formula. Completely different meaning depending on what you hold fixed and what you vary.</p>
+
+  <div class="cmp-grid">
+    <div class="cmp-card" style="border-top:3px solid var(--blue)">
+      <span class="cmp-title" style="color:var(--blue)">Probability</span>
+      <div class="cmp-item"><strong>θ is fixed</strong> (model is known)</div>
+      <div class="cmp-item"><strong>Data varies</strong> (ask about outcomes)</div>
+      <div class="cmp-item">Question: "If my model has θ=0.7, what's P(H,T,H)?"</div>
+      <div class="cmp-item">Direction: <strong>cause → effect</strong></div>
+      <div class="cmp-item">Thinking: <em>forward</em> — predict what happens</div>
+    </div>
+    <div class="cmp-card" style="border-top:3px solid var(--amber)">
+      <span class="cmp-title" style="color:var(--amber)">Likelihood</span>
+      <div class="cmp-item"><strong>Data is fixed</strong> (observed results)</div>
+      <div class="cmp-item"><strong>θ varies</strong> (we search for best model)</div>
+      <div class="cmp-item">Question: "Given I observed H,H,T,H, what θ explains it best?"</div>
+      <div class="cmp-item">Direction: <strong>effect → cause</strong></div>
+      <div class="cmp-item">Thinking: <em>reverse engineering</em> — find the cause</div>
+    </div>
+  </div>
+
+  <table class="tbl">
+    <tr><th>Aspect</th><th>Probability</th><th>Likelihood</th></tr>
+    <tr><td>What's fixed?</td><td>Parameters θ</td><td>Observed data</td></tr>
+    <tr><td>What varies?</td><td>Possible outcomes</td><td>Parameters θ</td></tr>
+    <tr><td>Real-world use</td><td>Forecasting, simulation</td><td>Model fitting, training</td></tr>
+    <tr><td>In deep learning</td><td>Model's output probabilities</td><td>The objective we maximize</td></tr>
+  </table>
+</div>
+
+<hr class="div">
+
+<!-- ═══ 04: COIN STORY ═══ -->
+<div class="sec" id="coin-story">
+  <div class="sec-lbl"><span class="sec-num">04</span><h2>The Coin Story — Probability vs Likelihood in Action</h2></div>
+
+  <p>This story will make the distinction unforgettable. Follow it carefully — it's the same mental model that underlies every training loop in deep learning.</p>
+
+  <div class="analogy">
+    <div class="analogy-ico">🪙</div>
+    <div>
+      <span class="analogy-tag">Setup</span>
+      <div class="analogy-body">You find a mysterious coin. You don't know if it's fair. The unknown property is θ = probability of getting Heads. Your mission: figure out θ by tossing it and observing results.</div>
+    </div>
+  </div>
+
+  <h3>Part 1 — Using Probability (θ known, data unknown)</h3>
+  <p>Suppose you already know θ = 0.7 (70% chance of Heads). Now you ask: <em>"What is the probability of getting H, T, H in three tosses?"</em></p>
+
+  <div class="math">
+    <span class="eq">P(H, T, H | θ=0.7) = 0.7 × (1−0.7) × 0.7 = 0.7 × 0.3 × 0.7 = 0.147</span>
+    <span class="eqlb">θ is fixed. We compute the probability of a specific sequence of outcomes. Forward thinking: model → data.</span>
+  </div>
+
+  <h3>Part 2 — Using Likelihood (data known, θ unknown)</h3>
+  <p>Now the situation is reversed. You toss the coin and observe: <strong>H, H, T, H</strong> (fixed). You ask: <em>"What value of θ best explains what I saw?"</em></p>
+
+  <div class="math">
+    <span class="eq">L(θ | H,H,T,H) = θ × θ × (1−θ) × θ = θ³(1−θ)</span>
+    <span class="eqlb">Data is fixed: H, H, T, H. We try different values of θ to find which explains the data best.</span>
+    <span class="eq" style="margin-top:14px;">θ = 0.5  →  0.5³ × 0.5  = 0.0625</span>
+    <span class="eq">θ = 0.8  →  0.8³ × 0.2  = 0.1024  ← highest!</span>
+    <span class="eq">θ = 0.9  →  0.9³ × 0.1  = 0.0729</span>
+    <span class="eqlb">θ = 0.8 gives the highest likelihood → this is the Maximum Likelihood Estimate (MLE). Three out of four flips were Heads, so 0.75 is mathematically optimal, and 0.8 is close.</span>
+  </div>
+
+  <div class="kta">
+    <span class="kta-lbl">The One-Line Summary</span>
+    <p>Probability: <em>"I know the coin, what will happen?"</em> — Likelihood: <em>"I saw what happened, what is the coin?"</em></p>
+  </div>
+
+  <p>Training a neural network is exactly this: the data is fixed (your training set), and you search over all possible parameter values θ (model weights) to find those that make the observed labels as probable as possible. <strong>That is MLE.</strong></p>
+</div>
+
+<hr class="div">
+
+<!-- ═══ 05: WHY LOG ═══ -->
+<div class="sec" id="why-log">
+  <div class="sec-lbl"><span class="sec-num">05</span><h2>Why the Log Function? — Four Deep Reasons</h2></div>
+
+  <p>This is the section most courses skip. We will not. The log function is not an arbitrary choice — it's the <em>natural</em> measure of information and surprise.</p>
+
+  <div class="math">
+    <span class="eq">Natural log values you must know:</span>
+    <span class="eq">log(1.0)  =  0       ← certain event → zero surprise</span>
+    <span class="eq">log(0.5)  ≈ −0.693  ← 50% likely → moderate surprise</span>
+    <span class="eq">log(0.1)  ≈ −2.303  ← 10% likely → high surprise</span>
+    <span class="eq">log(0.01) ≈ −4.605  ← 1% likely → very high surprise</span>
+    <span class="eqlb">Key: log of a probability is always ≤ 0. The smaller the probability, the more negative (and larger in magnitude) the log.</span>
+  </div>
+
+  <h3>Reason 1 — Products Become Sums</h3>
+  <p>For independent events (like all training examples), probabilities multiply together. The fundamental property of logarithms converts multiplication into addition:</p>
+
+  <div class="math">
+    <span class="eq">log(a × b × c) = log(a) + log(b) + log(c)</span>
+    <span class="eqlb">This is the most important property. It turns a product of N probabilities into a sum of N log-probabilities — and sums are infinitely easier to work with mathematically and computationally.</span>
+  </div>
+
+  <h3>Reason 2 — Preventing Numerical Underflow</h3>
+
+  <div class="analogy">
+    <div class="analogy-ico">💻</div>
+    <div>
+      <span class="analogy-tag">The Underflow Problem</span>
+      <div class="analogy-body">Computers store numbers with limited precision. Numbers smaller than ~10⁻³⁰⁸ get rounded to zero — called "underflow". If you train on 1 million examples and each prediction has probability 0.9, multiplying them gives 0.9^1,000,000 ≈ 10^(−45,757). This is so tiny computers store it as exactly zero, making training impossible. Taking the log converts this to 1,000,000 × log(0.9) ≈ −105,361 — a perfectly normal number computers handle easily.</div>
+    </div>
+  </div>
+
+  <h3>Reason 3 — Logarithmic Perception Matches Intuition</h3>
+
+  <div class="analogy">
+    <div class="analogy-ico">📊</div>
+    <div>
+      <span class="analogy-tag">The Richter Scale Analogy</span>
+      <div class="analogy-body">The Richter scale for earthquakes is logarithmic. A magnitude 7 earthquake is not twice as powerful as magnitude 6 — it is 10× stronger. This matches human intuition: the <em>difference between</em> 0.001 and 0.01 feels as significant as the difference between 0.1 and 1.0. The log function captures exactly this — equal ratios feel equally different. log(0.001)=−6.9 and log(0.01)=−4.6 are separated by the same gap as log(0.1)=−2.3 and log(1)=0.</div>
+    </div>
+  </div>
+
+  <h3>Reason 4 — Penalizes Confident Mistakes Severely</h3>
+  <p>This is the training signal reason. The loss uses −log(p). Watch what happens as the model becomes confident about the correct answer:</p>
+
+  <!-- Interactive log explorer -->
+  <div class="explorer">
+    <span class="explorer-title">Interactive — −log(p): the loss as a function of model confidence</span>
+    <div class="sl-row">
+      <label>Model confidence p =</label>
+      <input type="range" id="p-slider" min="1" max="99" value="70" oninput="updateLog()">
+      <span class="val" id="p-disp">0.70</span>
+    </div>
+    <div class="out-grid">
+      <div class="out-c">
+        <span class="out-lbl">Probability p</span>
+        <span class="out-val" id="p-val" style="color:var(--blue)">0.70</span>
+        <div class="out-note" id="p-note">Model is 70% confident</div>
+      </div>
+      <div class="out-c">
+        <span class="out-lbl">Loss = −log(p)</span>
+        <span class="out-val" id="log-val" style="color:var(--red)">0.357</span>
+        <div class="out-note" id="log-note">Small loss — good prediction</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SVG: log curve -->
+  <div class="fig">
+    <svg width="100%" viewBox="0 0 680 260">
+      <defs>
+        <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </marker>
+      </defs>
+      <!-- Axes -->
+      <line x1="60" y1="220" x2="600" y2="220" stroke="rgba(255,255,255,0.15)" stroke-width="0.75"/>
+      <line x1="60" y1="20" x2="60" y2="220" stroke="rgba(255,255,255,0.15)" stroke-width="0.75"/>
+      <!-- X axis labels -->
+      <text x="100" y="236" text-anchor="middle" font-family="JetBrains Mono" font-size="11" fill="rgba(122,120,112,0.8)">0.1</text>
+      <text x="195" y="236" text-anchor="middle" font-family="JetBrains Mono" font-size="11" fill="rgba(122,120,112,0.8)">0.3</text>
+      <text x="290" y="236" text-anchor="middle" font-family="JetBrains Mono" font-size="11" fill="rgba(122,120,112,0.8)">0.5</text>
+      <text x="385" y="236" text-anchor="middle" font-family="JetBrains Mono" font-size="11" fill="rgba(122,120,112,0.8)">0.7</text>
+      <text x="480" y="236" text-anchor="middle" font-family="JetBrains Mono" font-size="11" fill="rgba(122,120,112,0.8)">0.9</text>
+      <text x="575" y="236" text-anchor="middle" font-family="JetBrains Mono" font-size="11" fill="rgba(122,120,112,0.8)">1.0</text>
+      <!-- Axis titles -->
+      <text x="320" y="252" text-anchor="middle" fill="rgba(122,120,112,0.7)" font-family="JetBrains Mono" font-size="10">probability p (model confidence in correct answer)</text>
+      <text x="22" y="130" text-anchor="middle" fill="rgba(122,120,112,0.7)" font-family="JetBrains Mono" font-size="10" transform="rotate(-90,22,130)">loss = −log(p)</text>
+      <!-- Grid -->
+      <line x1="58" y1="200" x2="600" y2="200" stroke="rgba(255,255,255,0.04)" stroke-width="0.5" stroke-dasharray="3 4"/>
+      <line x1="58" y1="160" x2="600" y2="160" stroke="rgba(255,255,255,0.04)" stroke-width="0.5" stroke-dasharray="3 4"/>
+      <line x1="58" y1="120" x2="600" y2="120" stroke="rgba(255,255,255,0.04)" stroke-width="0.5" stroke-dasharray="3 4"/>
+      <line x1="58" y1="80" x2="600" y2="80" stroke="rgba(255,255,255,0.04)" stroke-width="0.5" stroke-dasharray="3 4"/>
+      <line x1="58" y1="40" x2="600" y2="40" stroke="rgba(255,255,255,0.04)" stroke-width="0.5" stroke-dasharray="3 4"/>
+      <text x="54" y="203" text-anchor="end" fill="rgba(122,120,112,0.6)" font-family="JetBrains Mono" font-size="10">0.5</text>
+      <text x="54" y="163" text-anchor="end" fill="rgba(122,120,112,0.6)" font-family="JetBrains Mono" font-size="10">1</text>
+      <text x="54" y="123" text-anchor="end" fill="rgba(122,120,112,0.6)" font-family="JetBrains Mono" font-size="10">2</text>
+      <text x="54" y="83" text-anchor="end" fill="rgba(122,120,112,0.6)" font-family="JetBrains Mono" font-size="10">3</text>
+      <text x="54" y="43" text-anchor="end" fill="rgba(122,120,112,0.6)" font-family="JetBrains Mono" font-size="10">4</text>
+      <!-- Loss curve -->
+      <path d="M68,213 L100,185 L130,166 L160,150 L195,132 L230,116 L260,102 L290,89 L320,78 L352,67 L385,55 L420,43 L450,33 L480,25 L510,25" fill="none" stroke="var(--red)" stroke-width="2" stroke-linecap="round"/>
+      <path d="M510,25 L540,17 L575,8" fill="none" stroke="var(--red)" stroke-width="1.5" stroke-linecap="round" stroke-dasharray="3 3" opacity="0.5"/>
+      <!-- Zones -->
+      <rect x="430" y="20" width="148" height="200" fill="rgba(62,203,142,0.04)" rx="2"/>
+      <text x="504" y="240" text-anchor="middle" fill="rgba(62,203,142,0.5)" font-family="JetBrains Mono" font-size="9">low loss zone</text>
+      <rect x="60" y="20" width="100" height="200" fill="rgba(224,85,85,0.04)" rx="2"/>
+      <text x="110" y="240" text-anchor="middle" fill="rgba(224,85,85,0.5)" font-family="JetBrains Mono" font-size="9">high loss zone</text>
+      <!-- Annotations -->
+      <circle cx="100" cy="185" r="4" fill="var(--red)"/>
+      <line x1="100" y1="178" x2="135" y2="150" stroke="rgba(255,255,255,0.2)" stroke-width="0.5" stroke-dasharray="2 3"/>
+      <text x="138" y="148" fill="rgba(224,85,85,0.9)" font-family="JetBrains Mono" font-size="10">p=0.1 → loss=2.3</text>
+      <circle cx="480" cy="25" r="4" fill="var(--green)"/>
+      <line x1="480" y1="30" x2="452" y2="55" stroke="rgba(255,255,255,0.2)" stroke-width="0.5" stroke-dasharray="2 3"/>
+      <text x="320" y="70" fill="rgba(62,203,142,0.9)" font-family="JetBrains Mono" font-size="10">p=0.9 → loss=0.1</text>
+      <!-- Curve label -->
+      <text x="150" y="115" fill="rgba(224,85,85,0.7)" font-family="JetBrains Mono" font-size="10.5" font-style="italic">−log(p)</text>
+    </svg>
+    <div class="fig-cap">Figure 1 — The −log(p) loss curve. High confidence in correct answer (p near 1) → near-zero loss. Low confidence or wrong prediction (p near 0) → loss shoots to infinity. This asymmetry is what drives learning.</div>
+  </div>
+</div>
+
+<hr class="div">
+
+<!-- ═══ 06: MLE ═══ -->
+<div class="sec" id="mle">
+  <div class="sec-lbl"><span class="sec-num">06</span><h2>Maximum Likelihood Estimation (MLE)</h2></div>
+
+  <p>MLE answers one central question: <strong>"Given the data I observed, what model parameters best explain it?"</strong></p>
+
+  <div class="analogy">
+    <div class="analogy-ico">🎯</div>
+    <div>
+      <span class="analogy-tag">The Shooter Analogy</span>
+      <div class="analogy-body">You're watching two archers: one expert, one beginner. The expert hits the bullseye 9/10 times. The beginner hits 3/10. You observe someone hit 9/10 times. Which archer is it most likely to be? The expert — because their known skill level <em>most likely</em> produces this result. That search — "which parameters make this data most probable?" — is MLE.</div>
+    </div>
+  </div>
+
+  <h3>The MLE Formula</h3>
+
+  <div class="math">
+    <span class="eq">Likelihood(θ) = ∏ᵢ P(yᵢ | xᵢ; θ)</span>
+    <span class="eqlb">Product of probabilities of all correct labels under parameters θ. Data is fixed; we vary θ.</span>
+    <span class="eq" style="margin-top:14px;">MLE Goal:    maximize  Σᵢ log P(yᵢ | xᵢ; θ)   [log-likelihood]</span>
+    <span class="eqlb">Maximizing log-likelihood is identical to maximizing likelihood (log is monotonically increasing). We use log for numerical stability.</span>
+    <span class="eq" style="margin-top:14px;">Equivalently: minimize  −Σᵢ log P(yᵢ | xᵢ; θ)  [negative log-likelihood = NLL]</span>
+    <span class="eqlb">We minimize (not maximize) because all optimization algorithms in deep learning do gradient descent. Negating the objective converts a maximization into a minimization.</span>
+  </div>
+
+  <div class="box ins">
+    <span class="box-lbl">The Big Revelation</span>
+    <p>When you write <code>F.cross_entropy()</code> or <code>F.nll_loss()</code> in PyTorch — that IS maximum likelihood estimation. The framework is: <em>"find model parameters that make the observed training labels as probable as possible."</em> Every training loop in deep learning is MLE in disguise.</p>
+  </div>
+
+  <h3>What "As Probable As Possible" Means Concretely</h3>
+  <p>In a 3-class problem, imagine the model predicts these probabilities for a cat image:</p>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:16px 0">
+    <div style="background:var(--surf2);border:1px solid var(--border);border-left:3px solid var(--green);padding:16px;border-radius:6px">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:10px;text-transform:uppercase;letter-spacing:.12em;color:var(--green);margin-bottom:8px">Good Model</div>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:13px;line-height:2">Cat → 0.90 ← correct class<br>Dog → 0.07<br>Car → 0.03</div>
+      <div style="font-size:12px;color:var(--muted);margin-top:8px">Correct class gets high probability → high likelihood</div>
+    </div>
+    <div style="background:var(--surf2);border:1px solid var(--border);border-left:3px solid var(--red);padding:16px;border-radius:6px">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:10px;text-transform:uppercase;letter-spacing:.12em;color:var(--red);margin-bottom:8px">Bad Model</div>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:13px;line-height:2">Cat → 0.05 ← correct class<br>Dog → 0.80<br>Car → 0.15</div>
+      <div style="font-size:12px;color:var(--muted);margin-top:8px">Correct class gets low probability → low likelihood</div>
+    </div>
+  </div>
+
+  <p>MLE training pushes the model from the right column toward the left column — adjusting weights so the correct label gets higher and higher probability.</p>
+</div>
+
+<hr class="div">
+
+<!-- ═══ 07: SOFTMAX ═══ -->
+<div class="sec" id="softmax">
+  <div class="sec-lbl"><span class="sec-num">07</span><h2>Softmax — Converting Logits to Probabilities</h2></div>
+
+  <p>Neural networks output raw numbers called <strong>logits</strong>. These can be any value — positive, negative, large, small. They are not probabilities. Softmax converts them to a valid probability distribution.</p>
+
+  <div class="math">
+    <span class="eq">softmax(zᵢ) = eᶻⁱ / Σⱼ eᶻʲ</span>
+    <span class="eqlb">For class i: raise e to the power of that logit, divide by the sum of e to the power of ALL logits.</span>
+    <span class="eq" style="margin-top:14px;">Example:  z = [2.1, 1.0, −0.5]</span>
+    <span class="eq">e^2.1 = 8.17,   e^1.0 = 2.72,   e^(−0.5) = 0.61</span>
+    <span class="eq">Sum = 8.17 + 2.72 + 0.61 = 11.5</span>
+    <span class="eq">P(cat) = 8.17/11.5 = 0.71 ✓</span>
+    <span class="eq">P(dog) = 2.72/11.5 = 0.24 ✓</span>
+    <span class="eq">P(car) = 0.61/11.5 = 0.05 ✓   [sum = 1.00]</span>
+  </div>
+
+  <!-- SVG: Logits → Softmax -->
+  <div class="fig">
+    <svg width="100%" viewBox="0 0 680 200">
+      <defs>
+        <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </marker>
+      </defs>
+      <!-- Logits -->
+      <text x="86" y="32" text-anchor="middle" fill="rgba(122,120,112,0.8)" font-family="JetBrains Mono" font-size="10">LOGITS (raw)</text>
+      <rect x="30" y="42" width="112" height="36" rx="6" fill="rgba(91,156,246,0.1)" stroke="rgba(91,156,246,0.3)" stroke-width="0.5"/>
+      <text x="86" y="65" text-anchor="middle" fill="#5b9cf6" font-family="JetBrains Mono" font-size="13">z₁ = 2.1</text>
+      <rect x="30" y="85" width="112" height="36" rx="6" fill="rgba(91,156,246,0.1)" stroke="rgba(91,156,246,0.3)" stroke-width="0.5"/>
+      <text x="86" y="108" text-anchor="middle" fill="#5b9cf6" font-family="JetBrains Mono" font-size="13">z₂ = 1.0</text>
+      <rect x="30" y="128" width="112" height="36" rx="6" fill="rgba(91,156,246,0.1)" stroke="rgba(91,156,246,0.3)" stroke-width="0.5"/>
+      <text x="86" y="151" text-anchor="middle" fill="#5b9cf6" font-family="JetBrains Mono" font-size="13">z₃ = −0.5</text>
+      <!-- Softmax box -->
+      <rect x="250" y="75" width="160" height="50" rx="8" fill="rgba(240,160,32,0.1)" stroke="rgba(240,160,32,0.3)" stroke-width="0.5"/>
+      <text x="330" y="97" text-anchor="middle" fill="#f0a020" font-family="JetBrains Mono" font-size="12">SOFTMAX</text>
+      <text x="330" y="115" text-anchor="middle" fill="rgba(240,160,32,0.65)" font-family="JetBrains Mono" font-size="10">eᶻⁱ / Σ eᶻʲ</text>
+      <!-- Arrows in -->
+      <line x1="143" y1="60" x2="248" y2="95" stroke="rgba(91,156,246,0.4)" stroke-width="1" marker-end="url(#arrow)"/>
+      <line x1="143" y1="103" x2="248" y2="103" stroke="rgba(91,156,246,0.4)" stroke-width="1" marker-end="url(#arrow)"/>
+      <line x1="143" y1="146" x2="248" y2="112" stroke="rgba(91,156,246,0.4)" stroke-width="1" marker-end="url(#arrow)"/>
+      <!-- Probabilities -->
+      <text x="560" y="32" text-anchor="middle" fill="rgba(122,120,112,0.8)" font-family="JetBrains Mono" font-size="10">PROBABILITIES</text>
+      <rect x="504" y="42" width="128" height="36" rx="6" fill="rgba(62,203,142,0.1)" stroke="rgba(62,203,142,0.3)" stroke-width="0.5"/>
+      <text x="568" y="65" text-anchor="middle" fill="#3ecb8e" font-family="JetBrains Mono" font-size="13">0.71  (cat)</text>
+      <rect x="504" y="85" width="128" height="36" rx="6" fill="rgba(62,203,142,0.08)" stroke="rgba(62,203,142,0.2)" stroke-width="0.5"/>
+      <text x="568" y="108" text-anchor="middle" fill="#3ecb8e" font-family="JetBrains Mono" font-size="13">0.24  (dog)</text>
+      <rect x="504" y="128" width="128" height="36" rx="6" fill="rgba(62,203,142,0.04)" stroke="rgba(62,203,142,0.12)" stroke-width="0.5"/>
+      <text x="568" y="151" text-anchor="middle" fill="rgba(62,203,142,0.65)" font-family="JetBrains Mono" font-size="13">0.05  (car)</text>
+      <!-- Arrows out -->
+      <line x1="412" y1="95" x2="502" y2="60" stroke="rgba(62,203,142,0.4)" stroke-width="1" marker-end="url(#arrow)"/>
+      <line x1="412" y1="103" x2="502" y2="103" stroke="rgba(62,203,142,0.4)" stroke-width="1" marker-end="url(#arrow)"/>
+      <line x1="412" y1="112" x2="502" y2="146" stroke="rgba(62,203,142,0.4)" stroke-width="1" marker-end="url(#arrow)"/>
+      <text x="568" y="183" text-anchor="middle" fill="rgba(122,120,112,0.6)" font-family="JetBrains Mono" font-size="10">0.71+0.24+0.05 = 1.0 ✓</text>
+    </svg>
+    <div class="fig-cap">Figure 2 — Softmax converts raw logits (any real number) into a valid probability distribution summing to 1.</div>
+  </div>
+
+  <h3>Why Use e (the Exponential)?</h3>
+  <p>Three reasons. First, <strong>e^x is always positive</strong> regardless of x — so we never get negative probabilities even when logits are negative. Second, it <strong>preserves order</strong> — a larger logit always produces a larger probability. Third, the exponential <strong>amplifies differences</strong> — a logit of 4 vs. 2 creates a much bigger probability gap than a linear ratio would, making the model more decisive in its predictions.</p>
+
+  <div class="math">
+    <span class="eq">Linear comparison: 4 vs 2  →  ratio = 2x (mild difference)</span>
+    <span class="eq">Exponential:       e⁴ ≈ 54.6  vs  e² ≈ 7.4  →  ratio = 7.4x (amplified!)</span>
+    <span class="eqlb">The exponential turns a subtle score difference into a clear probability winner, which is exactly what a classifier needs.</span>
+  </div>
+</div>
+
+<hr class="div">
+
+<!-- ═══ 08: TEMPERATURE ═══ -->
+<div class="sec" id="temperature">
+  <div class="sec-lbl"><span class="sec-num">08</span><h2>Temperature — The Hidden Confidence Knob</h2></div>
+
+  <p>You may have seen a "temperature" setting in ChatGPT or LLM APIs. Temperature modifies softmax by dividing logits before exponentiation:</p>
+
+  <div class="math">
+    <span class="eq">softmax(zᵢ / τ)   where τ = temperature</span>
+    <span class="eqlb">Dividing by τ before softmax controls how "sharp" or "flat" the resulting distribution is.</span>
+    <span class="eq" style="margin-top:14px;">τ → 0  :  distribution collapses to one-hot (always picks the highest logit, 100% confident)</span>
+    <span class="eq">τ = 1  :  standard softmax (default behavior)</span>
+    <span class="eq">τ → ∞ :  distribution becomes uniform (completely random, like guessing)</span>
+  </div>
+
+  <div class="analogy">
+    <div class="analogy-ico">🌡️</div>
+    <div>
+      <span class="analogy-tag">Intuition — The Opinion Analogy</span>
+      <div class="analogy-body">Logits are the "strength of opinion" the model has about each class. Temperature is "how strictly you follow the strongest opinion." Low temperature: always follow the strongest opinion (deterministic). High temperature: give equal weight to everyone's opinion regardless of confidence (random). This is literally what temperature does in ChatGPT — low temp = factual answers, high temp = creative writing.</div>
+    </div>
+  </div>
+
+  <!-- SVG: Temperature effect -->
+  <div class="fig">
+    <svg width="100%" viewBox="0 0 680 190">
+      <defs>
+        <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </marker>
+      </defs>
+      <text x="340" y="22" text-anchor="middle" fill="rgba(122,120,112,0.7)" font-family="JetBrains Mono" font-size="10">same logits [2.1, 1.0, −0.5] — three different temperatures</text>
+      <!-- τ=0.5 -->
+      <text x="115" y="44" text-anchor="middle" fill="rgba(122,120,112,0.8)" font-family="JetBrains Mono" font-size="10">τ = 0.5 (sharp)</text>
+      <rect x="54" y="52" width="122" height="22" rx="3" fill="rgba(62,203,142,0.7)"/>
+      <text x="115" y="68" text-anchor="middle" fill="#0e1a14" font-family="JetBrains Mono" font-size="10">0.93</text>
+      <rect x="54" y="79" width="38" height="22" rx="3" fill="rgba(62,203,142,0.25)"/>
+      <text x="73" y="95" text-anchor="middle" fill="rgba(62,203,142,0.9)" font-family="JetBrains Mono" font-size="10">0.06</text>
+      <rect x="97" y="79" width="14" height="22" rx="3" fill="rgba(62,203,142,0.1)"/>
+      <text x="115" y="95" text-anchor="middle" fill="rgba(62,203,142,0.6)" font-family="JetBrains Mono" font-size="10">0.01</text>
+      <text x="115" y="120" text-anchor="middle" fill="rgba(122,120,112,0.5)" font-family="JetBrains Mono" font-size="9">confident pick</text>
+      <!-- τ=1.0 -->
+      <text x="340" y="44" text-anchor="middle" fill="rgba(122,120,112,0.8)" font-family="JetBrains Mono" font-size="10">τ = 1.0 (standard)</text>
+      <rect x="279" y="52" width="97" height="22" rx="3" fill="rgba(91,156,246,0.7)"/>
+      <text x="340" y="68" text-anchor="middle" fill="#07131f" font-family="JetBrains Mono" font-size="10">0.71</text>
+      <rect x="279" y="79" width="56" height="22" rx="3" fill="rgba(91,156,246,0.35)"/>
+      <text x="307" y="95" text-anchor="middle" fill="rgba(91,156,246,0.9)" font-family="JetBrains Mono" font-size="10">0.24</text>
+      <rect x="340" y="79" width="20" height="22" rx="3" fill="rgba(91,156,246,0.12)"/>
+      <text x="355" y="95" text-anchor="middle" fill="rgba(91,156,246,0.7)" font-family="JetBrains Mono" font-size="10">0.05</text>
+      <text x="340" y="120" text-anchor="middle" fill="rgba(122,120,112,0.5)" font-family="JetBrains Mono" font-size="9">balanced</text>
+      <!-- τ=3.0 -->
+      <text x="565" y="44" text-anchor="middle" fill="rgba(122,120,112,0.8)" font-family="JetBrains Mono" font-size="10">τ = 3.0 (flat)</text>
+      <rect x="504" y="52" width="54" height="22" rx="3" fill="rgba(160,126,245,0.5)"/>
+      <text x="531" y="68" text-anchor="middle" fill="rgba(160,126,245,0.9)" font-family="JetBrains Mono" font-size="10">0.43</text>
+      <rect x="504" y="79" width="46" height="22" rx="3" fill="rgba(160,126,245,0.38)"/>
+      <text x="527" y="95" text-anchor="middle" fill="rgba(160,126,245,0.9)" font-family="JetBrains Mono" font-size="10">0.35</text>
+      <rect x="559" y="79" width="30" height="22" rx="3" fill="rgba(160,126,245,0.2)"/>
+      <text x="574" y="95" text-anchor="middle" fill="rgba(160,126,245,0.8)" font-family="JetBrains Mono" font-size="10">0.22</text>
+      <text x="565" y="120" text-anchor="middle" fill="rgba(122,120,112,0.5)" font-family="JetBrains Mono" font-size="9">creative / random</text>
+      <!-- Arrow -->
+      <line x1="85" y1="150" x2="600" y2="150" stroke="rgba(255,255,255,0.15)" stroke-width="0.75" marker-end="url(#arrow)"/>
+      <text x="340" y="167" text-anchor="middle" fill="rgba(122,120,112,0.5)" font-family="JetBrains Mono" font-size="9">increasing temperature →</text>
+    </svg>
+    <div class="fig-cap">Figure 3 — Temperature controls sharpness. Low τ: model picks confidently. High τ: probability spreads evenly across options. Used in LLM inference to control creativity vs determinism.</div>
+  </div>
+</div>
+
+<hr class="div">
+
+<!-- ═══ 09: CROSS-ENTROPY ═══ -->
+<div class="sec" id="crossent">
+  <div class="sec-lbl"><span class="sec-num">09</span><h2>Cross-Entropy Loss — The Standard Loss Function</h2></div>
+
+  <div class="analogy">
+    <div class="analogy-ico">🏹</div>
+    <div>
+      <span class="analogy-tag">Intuition — The Surprise Meter</span>
+      <div class="analogy-body">Cross-entropy measures: <em>"How surprised is my model by the true answer?"</em> A model that assigned 99% probability to the correct class is not surprised at all — low cross-entropy. A model that assigned 1% probability to the correct class is extremely surprised — high cross-entropy. Training minimizes this surprise. Think of it as a "shock meter" for the model.</div>
+    </div>
+  </div>
+
+  <div class="math">
+    <span class="eq">For a single example:    ℒ = − log P(y_true | x)</span>
+    <span class="eqlb">Take the negative log of the probability assigned to the correct class. That's it.</span>
+    <span class="eq" style="margin-top:14px;">Over N training examples:  ℒ = −(1/N) Σᵢ log P(yᵢ | xᵢ; θ)</span>
+    <span class="eqlb">Average the negative log-probability of the correct answer across all training examples.</span>
+  </div>
+
+  <!-- SVG: Cross entropy example -->
+  <div class="fig">
+    <svg width="100%" viewBox="0 0 680 230">
+      <defs>
+        <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </marker>
+      </defs>
+      <text x="340" y="22" text-anchor="middle" fill="rgba(122,120,112,0.7)" font-family="JetBrains Mono" font-size="10">cross-entropy — two model predictions for the same image (true label = cat)</text>
+      <!-- Good model -->
+      <text x="155" y="45" text-anchor="middle" fill="#3ecb8e" font-family="JetBrains Mono" font-size="11">Good model</text>
+      <rect x="54" y="55" width="202" height="26" rx="4" fill="rgba(62,203,142,0.65)"/>
+      <text x="68" y="73" fill="#07201a" font-family="JetBrains Mono" font-size="11">cat  0.90 ← TRUE CLASS</text>
+      <rect x="54" y="86" width="50" height="22" rx="4" fill="rgba(62,203,142,0.2)"/>
+      <text x="68" y="102" fill="rgba(62,203,142,0.8)" font-family="JetBrains Mono" font-size="11">dog  0.08</text>
+      <rect x="54" y="113" width="22" height="22" rx="4" fill="rgba(62,203,142,0.1)"/>
+      <text x="68" y="129" fill="rgba(62,203,142,0.5)" font-family="JetBrains Mono" font-size="11">car  0.02</text>
+      <rect x="54" y="148" width="202" height="52" rx="6" fill="rgba(62,203,142,0.06)" stroke="rgba(62,203,142,0.2)" stroke-width="0.5"/>
+      <text x="155" y="169" text-anchor="middle" fill="rgba(62,203,142,0.9)" font-family="JetBrains Mono" font-size="11">Loss = −log(0.90)</text>
+      <text x="155" y="189" text-anchor="middle" fill="#3ecb8e" font-family="JetBrains Mono" font-size="14">= 0.105  ✓ low</text>
+      <!-- Bad model -->
+      <text x="500" y="45" text-anchor="middle" fill="#e05555" font-family="JetBrains Mono" font-size="11">Bad model</text>
+      <rect x="399" y="55" width="48" height="26" rx="4" fill="rgba(224,85,85,0.35)"/>
+      <text x="413" y="73" fill="rgba(224,85,85,0.9)" font-family="JetBrains Mono" font-size="11">cat  0.05 ← TRUE</text>
+      <rect x="399" y="86" width="182" height="22" rx="4" fill="rgba(224,85,85,0.6)"/>
+      <text x="413" y="102" fill="#1a0505" font-family="JetBrains Mono" font-size="11">dog  0.80</text>
+      <rect x="399" y="113" width="60" height="22" rx="4" fill="rgba(224,85,85,0.25)"/>
+      <text x="413" y="129" fill="rgba(224,85,85,0.7)" font-family="JetBrains Mono" font-size="11">car  0.15</text>
+      <rect x="399" y="148" width="202" height="52" rx="6" fill="rgba(224,85,85,0.06)" stroke="rgba(224,85,85,0.2)" stroke-width="0.5"/>
+      <text x="500" y="169" text-anchor="middle" fill="rgba(224,85,85,0.9)" font-family="JetBrains Mono" font-size="11">Loss = −log(0.05)</text>
+      <text x="500" y="189" text-anchor="middle" fill="#e05555" font-family="JetBrains Mono" font-size="14">= 2.996  ✗ high</text>
+      <text x="340" y="218" text-anchor="middle" fill="rgba(122,120,112,0.55)" font-family="JetBrains Mono" font-size="9">only the probability of the TRUE class matters — other class probabilities are ignored</text>
+    </svg>
+    <div class="fig-cap">Figure 4 — Cross-entropy only cares about the probability given to the correct class. The bad model assigns 0.05 to cat (the true label) — a loss ~28× higher than the good model.</div>
+  </div>
+
+  <div class="box mth">
+    <span class="box-lbl">Cross-Entropy = NLL = MLE — Three Names, One Truth</span>
+    <p><strong>Cross-entropy loss</strong> — information theory framing: how many "bits" does it take to communicate the true label under the model's predicted distribution?</p>
+    <p><strong>Negative Log-Likelihood (NLL)</strong> — probability framing: how unlikely was the true label under the model? High NLL = the correct answer was very unexpected (high "unlikeliness").</p>
+    <p><strong>Maximum Likelihood Estimation (MLE)</strong> — optimization framing: find parameters that maximize the probability of the data. Minimizing NLL = maximizing likelihood. These are mathematically identical.</p>
+  </div>
+</div>
+
+<hr class="div">
+
+<!-- ═══ 10: SUMMATION ROLE ═══ -->
+<div class="sec" id="summation">
+  <div class="sec-lbl"><span class="sec-num">10</span><h2>The Full Formula — Role of the Summation and yᵢ</h2></div>
+
+  <p>You may have seen cross-entropy written as <code>ℒ = −Σᵢ yᵢ log(pᵢ)</code> with a summation. But when you compute it in practice, the sum disappears and you're left with just <code>−log(correct class probability)</code>. Why?</p>
+
+  <div class="math">
+    <span class="eq">Full formula:  ℒ = −Σᵢ yᵢ · log(pᵢ)</span>
+    <span class="eqlb">Sum over all classes i. yᵢ = 1 if class i is correct, 0 otherwise. pᵢ = model's predicted probability for class i.</span>
+    <span class="eq" style="margin-top:14px;">For a cat image with 3 classes, true label = cat:</span>
+    <span class="eq">yᵢ values:   y_cat = 1,   y_dog = 0,   y_car = 0   (one-hot encoding)</span>
+    <span class="eq">pᵢ values:   p_cat = 0.7, p_dog = 0.2, p_car = 0.1</span>
+    <span class="eq" style="margin-top:10px;">ℒ = −(1·log(0.7) + 0·log(0.2) + 0·log(0.1))</span>
+    <span class="eq">ℒ = −(log(0.7) + 0 + 0)</span>
+    <span class="eq">ℒ = −log(0.7) = 0.357</span>
+    <span class="eqlb">The zero terms vanish! Only the true class survives because yᵢ=1 for only one class and yᵢ=0 for all others. The summation and yᵢ are not unnecessary — they are a "selector" that picks out the correct class from all classes.</span>
+  </div>
+
+  <div class="box ins">
+    <span class="box-lbl">Why The Full Formula Exists</span>
+    <p>In multi-label tasks (where multiple classes can be simultaneously correct), many yᵢ values can be 1 at once, and the full summation matters. In standard single-label classification, the one-hot structure collapses the sum to a single term — which is why the simplified <code>ℒ = −log(pᵢ_true)</code> version is usually shown.</p>
+  </div>
+</div>
+
+<hr class="div">
+
+<!-- ═══ 11: KL ═══ -->
+<div class="sec" id="kl">
+  <div class="sec-lbl"><span class="sec-num">11</span><h2>KL Divergence — How Different Are Two Distributions?</h2></div>
+
+  <p>KL divergence measures how different one probability distribution is from another. It appears everywhere in modern deep learning.</p>
+
+  <div class="analogy">
+    <div class="analogy-ico">🗺️</div>
+    <div>
+      <span class="analogy-tag">The Map Analogy</span>
+      <div class="analogy-body">You have a perfect weather map (distribution P) and your friend has a rough hand-drawn map (distribution Q). KL(P‖Q) measures how much extra confusion you'd experience navigating with your friend's map versus the perfect one. If the maps are identical, KL = 0. The more they differ, the higher the KL.</div>
+    </div>
+  </div>
+
+  <div class="math">
+    <span class="eq">KL(P ‖ Q) = Σᵢ P(i) × log[ P(i) / Q(i) ]</span>
+    <span class="eqlb">Sum over all outcomes of: true probability × log(true/model). Always ≥ 0. Equals 0 only when P = Q exactly.</span>
+    <span class="eq" style="margin-top:14px;">KL is asymmetric:  KL(P‖Q) ≠ KL(Q‖P)</span>
+    <span class="eqlb">"How different is my model from the data?" is a different question than "How different is the data from my model?"</span>
+  </div>
+
+  <h3>The Three Concepts Together — Entropy, Cross-Entropy, KL</h3>
+
+  <div class="math">
+    <span class="eq">Entropy H(P)       = −Σᵢ P(i) log P(i)</span>
+    <span class="eqlb">Entropy of the TRUE distribution only. Measures the intrinsic uncertainty/complexity in the data itself. Fixed — we can't control it.</span>
+    <span class="eq" style="margin-top:12px;">Cross-Entropy H(P,Q) = −Σᵢ P(i) log Q(i)</span>
+    <span class="eqlb">How many bits needed to encode data drawn from P using a code designed for Q. Lower when model Q matches reality P.</span>
+    <span class="eq" style="margin-top:12px;">Key relationship:  H(P,Q) = H(P) + KL(P ‖ Q)</span>
+    <span class="eqlb">Cross-entropy = data's inherent entropy + the extra cost from using the wrong distribution. Since H(P) is fixed, minimizing cross-entropy = minimizing KL divergence.</span>
+  </div>
+
+  <table class="tbl">
+    <tr><th>Concept</th><th>Analogy</th><th>What changes during training</th></tr>
+    <tr><td>Entropy H(P)</td><td>How hard the exam questions are</td><td>Fixed — determined by your data</td></tr>
+    <tr><td>Cross-Entropy H(P,Q)</td><td>How many mistakes the student (model) makes</td><td>Decreases as model improves</td></tr>
+    <tr><td>KL Divergence</td><td>How far the student is from the teacher</td><td>Decreases toward 0 as model converges</td></tr>
+    <tr><td>NLL</td><td>How wrong on a single question</td><td>The per-sample loss we backprop through</td></tr>
+  </table>
+
+  <div class="box int">
+    <span class="box-lbl">Where KL Divergence Appears in Modern ML</span>
+    <p><strong>VAEs:</strong> KL(encoder output ‖ Gaussian) keeps latent space organized. Without this, the latent space becomes irregular and sampling from it produces garbage.</p>
+    <p><strong>PPO (RLHF):</strong> KL(new policy ‖ old policy) prevents the model from changing too drastically in one step.</p>
+    <p><strong>DPO (alignment):</strong> β × KL(π ‖ π_ref) controls how far the model drifts from the base model. β is the regularization strength.</p>
+    <p><strong>Knowledge Distillation:</strong> KL(teacher ‖ student) trains a small model to match a big model's full output distribution, not just its top prediction.</p>
+  </div>
+</div>
+
+<hr class="div">
+
+<!-- ═══ 12: GRADIENT ═══ -->
+<div class="sec" id="gradient">
+  <div class="sec-lbl"><span class="sec-num">12</span><h2>The Gradient of Cross-Entropy — The Most Elegant Result in DL</h2></div>
+
+  <p>Here is one of the most beautiful results in deep learning. When you combine softmax and cross-entropy loss, the gradient with respect to the logits simplifies to something shockingly simple.</p>
+
+  <div class="kta">
+    <span class="kta-lbl">The Result</span>
+    <p>∂ℒ/∂zₖ = pₖ − yₖ     i.e.,     gradient = prediction − truth</p>
+  </div>
+
+  <p>Let's verify this with numbers. Suppose the model outputs for a cat image:</p>
+
+  <table class="grad-table">
+    <tr><th>Class</th><th>Prediction p</th><th>True label y</th><th>Gradient (p − y)</th><th>What happens</th></tr>
+    <tr>
+      <td style="font-family:'JetBrains Mono',monospace">Cat (true)</td>
+      <td>0.7</td>
+      <td>1</td>
+      <td class="grad-neg">0.7 − 1 = −0.3</td>
+      <td style="font-size:12px;color:var(--green)">Negative → logit pushed UP ↑</td>
+    </tr>
+    <tr>
+      <td style="font-family:'JetBrains Mono',monospace">Dog</td>
+      <td>0.2</td>
+      <td>0</td>
+      <td class="grad-pos">0.2 − 0 = +0.2</td>
+      <td style="font-size:12px;color:var(--red)">Positive → logit pushed DOWN ↓</td>
+    </tr>
+    <tr>
+      <td style="font-family:'JetBrains Mono',monospace">Car</td>
+      <td>0.1</td>
+      <td>0</td>
+      <td class="grad-pos">0.1 − 0 = +0.1</td>
+      <td style="font-size:12px;color:var(--red)">Positive → logit pushed DOWN ↓</td>
+    </tr>
+  </table>
+
+  <div class="box ins">
+    <span class="box-lbl">Why This Is Beautiful</span>
+    <p>The gradient automatically knows what to do: <strong>push the correct class up, push wrong classes down</strong> — proportional to how wrong each prediction was. The model that was 70% confident about the right answer gets a gentle nudge (−0.3). If it had been 10% confident, the nudge would be −0.9 (much stronger). The learning signal is proportional to the mistake.</p>
+  </div>
+
+  <p>This also explains why this is called the "wrongness meter": each gradient term is exactly the model's prediction error. Large error → large gradient → large update. The optimizer is measuring precisely how wrong each class was and correcting accordingly.</p>
+</div>
+
+<hr class="div">
+
+<!-- ═══ 13: SOFTMAX DERIV ═══ -->
+<div class="sec" id="softmax-deriv">
+  <div class="sec-lbl"><span class="sec-num">13</span><h2>Deriving the Gradient — Where Does p − y Come From?</h2></div>
+
+  <p>Let's prove the result from the previous section. This is pure calculus using the quotient rule and chain rule. Follow step by step — every line comes from the one above.</p>
+
+  <h3>Step 1 — Write Softmax as a Fraction</h3>
+  <div class="math">
+    <span class="eq">pᵢ = eᶻⁱ / S     where  S = Σⱼ eᶻʲ  (the denominator, the sum of all exponentials)</span>
+  </div>
+
+  <h3>Step 2 — Apply the Quotient Rule to ∂pᵢ/∂zₖ</h3>
+  <div class="math">
+    <span class="eq">d/dz (A/B) = (A'B − AB') / B²</span>
+    <span class="eqlb">Here A = eᶻⁱ and B = S. We need to differentiate both with respect to zₖ.</span>
+    <span class="eq" style="margin-top:14px;">(a) Numerator derivative:  ∂eᶻⁱ/∂zₖ = eᶻⁱ if i=k,  else 0</span>
+    <span class="eqlb">This can be written compactly as eᶻⁱ · δᵢₖ, where δᵢₖ (Kronecker delta) = 1 if i=k, else 0.</span>
+    <span class="eq" style="margin-top:10px;">(b) Denominator derivative: ∂S/∂zₖ = ∂(Σⱼ eᶻʲ)/∂zₖ = eᶻₖ</span>
+    <span class="eqlb">Only the term where j=k survives differentiation.</span>
+  </div>
+
+  <h3>Step 3 — Put It Together</h3>
+  <div class="math">
+    <span class="eq">∂pᵢ/∂zₖ = (eᶻⁱ·δᵢₖ · S − eᶻⁱ · eᶻₖ) / S²</span>
+    <span class="eq">         = (eᶻⁱ/S)(δᵢₖ − eᶻₖ/S)</span>
+    <span class="eq">         = pᵢ · (δᵢₖ − pₖ)</span>
+    <span class="eqlb">Two cases: if i=k then δᵢₖ=1, giving pᵢ(1−pᵢ). If i≠k then δᵢₖ=0, giving −pᵢpₖ. A larger probability for any class comes at the expense of all others — they're coupled.</span>
+  </div>
+
+  <h3>Step 4 — Apply Chain Rule for the Full Gradient</h3>
+  <div class="math">
+    <span class="eq">∂ℒ/∂zₖ = Σᵢ (∂ℒ/∂pᵢ) · (∂pᵢ/∂zₖ)</span>
+    <span class="eqlb">Chain rule: loss → probability → logit.</span>
+    <span class="eq" style="margin-top:10px;">∂ℒ/∂pᵢ = −yᵢ/pᵢ     (derivative of −Σ yᵢ log pᵢ with respect to pᵢ)</span>
+    <span class="eq" style="margin-top:10px;">Substituting:  ∂ℒ/∂zₖ = Σᵢ (−yᵢ/pᵢ) · pᵢ(δᵢₖ − pₖ)</span>
+    <span class="eq">                       = Σᵢ −yᵢ(δᵢₖ − pₖ)</span>
+    <span class="eq">                       = −yₖ + pₖ · Σᵢ yᵢ</span>
+    <span class="eqlb">Since labels are one-hot: Σᵢ yᵢ = 1 (exactly one class is correct)</span>
+    <span class="eq" style="margin-top:10px;">∂ℒ/∂zₖ = pₖ − yₖ  ✓</span>
+    <span class="eqlb">Prediction minus truth. Clean, simple, and makes perfect intuitive sense.</span>
+  </div>
+
+  <div class="box mth">
+    <span class="box-lbl">Why This Derivation Matters for Research</span>
+    <p>This result — gradient = prediction − truth — is not just mathematically elegant. It tells you how quickly a model learns: the larger the prediction error, the larger the gradient, the larger the weight update. It also shows that softmax and cross-entropy are "made for each other" — their combination produces the cleanest possible gradient. This is why <code>F.cross_entropy(logits, targets)</code> in PyTorch applies softmax internally and should be used instead of applying softmax separately and then using NLL loss.</p>
+  </div>
+</div>
+
+<hr class="div">
+
+<!-- ═══ 14: FULL PICTURE ═══ -->
+<div class="sec" id="everything">
+  <div class="sec-lbl"><span class="sec-num">14</span><h2>The Complete Picture — Everything Connected</h2></div>
+
+  <p>Every concept from today flows into the others. Here is the full training loop expressed as a unified diagram:</p>
+
+  <!-- SVG: Full training loop -->
+  <div class="fig">
+    <svg width="100%" viewBox="0 0 680 320">
+      <defs>
+        <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </marker>
+      </defs>
+      <!-- Row 1 -->
+      <rect x="30" y="30" width="110" height="44" rx="8" fill="rgba(91,156,246,0.12)" stroke="rgba(91,156,246,0.3)" stroke-width="0.5"/>
+      <text x="85" y="48" text-anchor="middle" fill="#5b9cf6" font-family="JetBrains Mono" font-size="11" font-weight="500">Raw input x</text>
+      <text x="85" y="63" text-anchor="middle" fill="rgba(91,156,246,0.6)" font-family="JetBrains Mono" font-size="9">image / text / graph</text>
+      <line x1="141" y1="52" x2="183" y2="52" stroke="rgba(91,156,246,0.4)" stroke-width="1" marker-end="url(#arrow)"/>
+      <rect x="184" y="30" width="110" height="44" rx="8" fill="rgba(160,126,245,0.12)" stroke="rgba(160,126,245,0.3)" stroke-width="0.5"/>
+      <text x="239" y="48" text-anchor="middle" fill="#a07ef5" font-family="JetBrains Mono" font-size="11" font-weight="500">Neural net fθ</text>
+      <text x="239" y="63" text-anchor="middle" fill="rgba(160,126,245,0.6)" font-family="JetBrains Mono" font-size="9">produces logits z</text>
+      <line x1="295" y1="52" x2="337" y2="52" stroke="rgba(160,126,245,0.4)" stroke-width="1" marker-end="url(#arrow)"/>
+      <rect x="338" y="30" width="110" height="44" rx="8" fill="rgba(240,160,32,0.12)" stroke="rgba(240,160,32,0.3)" stroke-width="0.5"/>
+      <text x="393" y="48" text-anchor="middle" fill="#f0a020" font-family="JetBrains Mono" font-size="11" font-weight="500">Softmax</text>
+      <text x="393" y="63" text-anchor="middle" fill="rgba(240,160,32,0.6)" font-family="JetBrains Mono" font-size="9">logits → probabilities</text>
+      <line x1="449" y1="52" x2="491" y2="52" stroke="rgba(240,160,32,0.4)" stroke-width="1" marker-end="url(#arrow)"/>
+      <rect x="492" y="30" width="120" height="44" rx="8" fill="rgba(62,203,142,0.12)" stroke="rgba(62,203,142,0.3)" stroke-width="0.5"/>
+      <text x="552" y="48" text-anchor="middle" fill="#3ecb8e" font-family="JetBrains Mono" font-size="11" font-weight="500">P(y | x; θ)</text>
+      <text x="552" y="63" text-anchor="middle" fill="rgba(62,203,142,0.6)" font-family="JetBrains Mono" font-size="9">predicted distribution</text>
+      <!-- Row 2 -->
+      <line x1="552" y1="75" x2="552" y2="117" stroke="rgba(62,203,142,0.3)" stroke-width="1" marker-end="url(#arrow)"/>
+      <line x1="85" y1="75" x2="85" y2="162" stroke="rgba(91,156,246,0.3)" stroke-width="0.75" stroke-dasharray="3 3"/>
+      <line x1="85" y1="162" x2="393" y2="162" stroke="rgba(91,156,246,0.3)" stroke-width="0.75" stroke-dasharray="3 3" marker-end="url(#arrow)"/>
+      <text x="235" y="155" text-anchor="middle" fill="rgba(122,120,112,0.55)" font-family="JetBrains Mono" font-size="9">true label y (one-hot)</text>
+      <rect x="393" y="118" width="318" height="50" rx="8" fill="rgba(224,85,85,0.1)" stroke="rgba(224,85,85,0.25)" stroke-width="0.5"/>
+      <text x="552" y="140" text-anchor="middle" fill="#e05555" font-family="JetBrains Mono" font-size="12" font-weight="500">Cross-entropy loss</text>
+      <text x="552" y="157" text-anchor="middle" fill="rgba(224,85,85,0.65)" font-family="JetBrains Mono" font-size="9">ℒ = −log P(y_true | x; θ)</text>
+      <!-- Row 3 -->
+      <line x1="552" y1="169" x2="552" y2="204" stroke="rgba(224,85,85,0.3)" stroke-width="1" marker-end="url(#arrow)"/>
+      <rect x="290" y="205" width="524" height="44" rx="8" fill="rgba(255,255,255,0.03)" stroke="rgba(255,255,255,0.08)" stroke-width="0.5"/>
+      <text x="552" y="223" text-anchor="middle" fill="var(--text)" font-family="JetBrains Mono" font-size="10">= Negative Log-Likelihood  =  KL(true ‖ predicted) + const</text>
+      <text x="552" y="238" text-anchor="middle" fill="rgba(122,120,112,0.6)" font-family="JetBrains Mono" font-size="9">three names for the same objective</text>
+      <!-- Row 4: gradient -->
+      <line x1="552" y1="250" x2="552" y2="272" stroke="rgba(255,255,255,0.15)" stroke-width="1" marker-end="url(#arrow)"/>
+      <rect x="290" y="273" width="524" height="24" rx="4" fill="rgba(160,126,245,0.06)" stroke="rgba(160,126,245,0.15)" stroke-width="0.5"/>
+      <text x="552" y="289" text-anchor="middle" fill="rgba(160,126,245,0.8)" font-family="JetBrains Mono" font-size="10">gradient = pₖ − yₖ  (prediction − truth)</text>
+      <!-- Backprop arrow back -->
+      <line x1="552" y1="298" x2="239" y2="298" stroke="rgba(160,126,245,0.3)" stroke-width="1" stroke-dasharray="3 3"/>
+      <line x1="239" y1="298" x2="239" y2="76" stroke="rgba(160,126,245,0.3)" stroke-width="1" stroke-dasharray="3 3" marker-end="url(#arrow)"/>
+      <text x="380" y="313" text-anchor="middle" fill="rgba(122,120,112,0.4)" font-family="JetBrains Mono" font-size="9">backpropagation → update θ to reduce loss → repeat</text>
+    </svg>
+    <div class="fig-cap">Figure 5 — The complete forward/backward pass. Raw input → neural net → softmax → probability → cross-entropy loss (= NLL = KL divergence). Gradient = p − y flows back to update θ. Repeat until convergence.</div>
+  </div>
+
+  <div class="kta">
+    <span class="kta-lbl">The Unified View</span>
+    <p>Training a neural network is just iteratively asking: "How surprised was my model by the correct answers?" — and nudging the parameters to be less surprised next time. Log, softmax, likelihood, and cross-entropy are all different words for the same mathematical story.</p>
+  </div>
+</div>
+
+<hr class="div">
+
+<!-- ═══ CODE ═══ -->
+<div class="sec" id="code">
+  <div class="sec-lbl"><span class="sec-num">15</span><h2>Code — Everything From Scratch</h2></div>
+
+  <div class="code">
+    <div class="code-hd">
+      <span class="code-lang">Python · NumPy + PyTorch</span>
+      <span class="code-desc">Log, Softmax, Likelihood, Cross-Entropy, KL, Gradient — all from scratch</span>
+    </div>
+    <pre><span class="kw">import</span> numpy <span class="kw">as</span> np
+<span class="kw">import</span> torch
+<span class="kw">import</span> torch.nn.functional <span class="kw">as</span> F
+
+<span class="cm"># ─────────────────────────────────────────────────────────────
+# 1. LOG OF PROBABILITIES
+# ─────────────────────────────────────────────────────────────</span>
+<span class="fn">print</span>(<span class="st">"Probability  →  −log(p)  [the loss]"</span>)
+<span class="kw">for</span> p <span class="kw">in</span> [<span class="nm">0.99</span>, <span class="nm">0.5</span>, <span class="nm">0.1</span>, <span class="nm">0.01</span>]:
+    <span class="fn">print</span>(<span class="st">f"  p = {p:.2f}  →  loss = {-np.<span class="fn">log</span>(p):.3f}"</span>)
+<span class="cm"># p=0.99 → 0.010  (model was right, tiny loss)
+# p=0.01 → 4.605  (model was catastrophically wrong)</span>
+
+
+<span class="cm"># ─────────────────────────────────────────────────────────────
+# 2. LIKELIHOOD — the coin toss example
+# ─────────────────────────────────────────────────────────────</span>
+<span class="cm"># Observed: H, H, T, H (data is FIXED)</span>
+<span class="cm"># Try different theta values to find maximum likelihood</span>
+<span class="kw">def</span> <span class="fn">likelihood</span>(theta):
+    <span class="st">"""L(theta | H,H,T,H) = theta³ × (1-theta)"""</span>
+    <span class="kw">return</span> theta**<span class="nm">3</span> * (<span class="nm">1</span> - theta)
+
+<span class="fn">print</span>(<span class="st">"\nLikelihood for H,H,T,H:"</span>)
+<span class="kw">for</span> theta <span class="kw">in</span> [<span class="nm">0.3</span>, <span class="nm">0.5</span>, <span class="nm">0.75</span>, <span class="nm">0.8</span>, <span class="nm">0.9</span>]:
+    <span class="fn">print</span>(<span class="st">f"  theta={theta} → L={<span class="fn">likelihood</span>(theta):.4f}"</span>)
+<span class="cm"># theta=0.75 gives maximum → that's the MLE estimate (3/4 were Heads)</span>
+
+
+<span class="cm"># ─────────────────────────────────────────────────────────────
+# 3. SOFTMAX + TEMPERATURE
+# ─────────────────────────────────────────────────────────────</span>
+<span class="kw">def</span> <span class="fn">softmax</span>(z, tau=<span class="nm">1.0</span>):
+    <span class="st">"""Softmax with temperature τ. Standard softmax when τ=1."""</span>
+    z_scaled = z / tau
+    exp_z = np.<span class="fn">exp</span>(z_scaled - np.<span class="fn">max</span>(z_scaled))  <span class="cm"># subtract max for stability</span>
+    <span class="kw">return</span> exp_z / np.<span class="fn">sum</span>(exp_z)
+
+logits = np.array([<span class="nm">2.1</span>, <span class="nm">1.0</span>, -<span class="nm">0.5</span>])
+
+<span class="fn">print</span>(<span class="st">"\nTemperature effect on same logits [2.1, 1.0, -0.5]:"</span>)
+<span class="kw">for</span> tau <span class="kw">in</span> [<span class="nm">0.5</span>, <span class="nm">1.0</span>, <span class="nm">3.0</span>]:
+    probs = <span class="fn">softmax</span>(logits, tau)
+    <span class="fn">print</span>(<span class="st">f"  τ={tau}: {probs.round(3)}"</span>)
+<span class="cm"># τ=0.5 → [0.93, 0.06, 0.01]  ← sharp/confident
+# τ=1.0 → [0.71, 0.24, 0.05]  ← standard
+# τ=3.0 → [0.43, 0.35, 0.22]  ← flat/creative</span>
+
+
+<span class="cm"># ─────────────────────────────────────────────────────────────
+# 4. CROSS-ENTROPY LOSS — manually, with summation and y_i
+# ─────────────────────────────────────────────────────────────</span>
+<span class="kw">def</span> <span class="fn">cross_entropy_full</span>(probs, one_hot_labels):
+    <span class="st">"""
+    Full formula: L = −Σᵢ yᵢ·log(pᵢ)
+    Shows the summation and yᵢ explicitly.
+    """</span>
+    <span class="cm"># Each term: y_i * log(p_i). All terms with y_i=0 vanish.</span>
+    terms = one_hot_labels * np.<span class="fn">log</span>(probs + <span class="nm">1e-10</span>)
+    <span class="fn">print</span>(<span class="st">f"  Terms (y_i * log(p_i)): {terms.round(3)}"</span>)
+    <span class="fn">print</span>(<span class="st">f"  Non-zero terms: only the true class survives!"</span>)
+    <span class="kw">return</span> -np.<span class="fn">sum</span>(terms)
+
+<span class="cm"># 3-class: cat (true), dog, car</span>
+probs_good = np.array([<span class="nm">0.7</span>, <span class="nm">0.2</span>, <span class="nm">0.1</span>])
+probs_bad  = np.array([<span class="nm">0.1</span>, <span class="nm">0.8</span>, <span class="nm">0.1</span>])
+y_true     = np.array([<span class="nm">1.0</span>, <span class="nm">0.0</span>, <span class="nm">0.0</span>])  <span class="cm"># one-hot: cat is correct</span>
+
+<span class="fn">print</span>(<span class="st">"\nGood model (cat=0.7):"</span>)
+loss_good = <span class="fn">cross_entropy_full</span>(probs_good, y_true)
+<span class="fn">print</span>(<span class="st">f"  Loss = {loss_good:.3f}"</span>)  <span class="cm"># ≈ 0.357</span>
+
+<span class="fn">print</span>(<span class="st">"\nBad model (cat=0.1):"</span>)
+loss_bad = <span class="fn">cross_entropy_full</span>(probs_bad, y_true)
+<span class="fn">print</span>(<span class="st">f"  Loss = {loss_bad:.3f}"</span>)   <span class="cm"># ≈ 2.303</span>
+
+
+<span class="cm"># ─────────────────────────────────────────────────────────────
+# 5. GRADIENT = prediction − truth  (the beautiful result)
+# ─────────────────────────────────────────────────────────────</span>
+<span class="kw">def</span> <span class="fn">compute_gradient</span>(logits, true_class_idx):
+    <span class="st">"""
+    Gradient of cross-entropy loss wrt logits.
+    Result: gradient[k] = p[k] - y[k]  (prediction minus truth)
+    """</span>
+    probs = <span class="fn">softmax</span>(logits)
+    y = np.<span class="fn">zeros_like</span>(probs)
+    y[true_class_idx] = <span class="nm">1.0</span>
+    gradient = probs - y          <span class="cm"># gradient = p - y</span>
+    <span class="kw">return</span> gradient, probs
+
+logits_example = np.array([<span class="nm">1.2</span>, <span class="nm">0.5</span>, <span class="nm">0.1</span>])  <span class="cm"># cat, dog, car</span>
+grad, probs = <span class="fn">compute_gradient</span>(logits_example, true_class_idx=<span class="nm">0</span>)  <span class="cm"># cat is true</span>
+
+<span class="fn">print</span>(<span class="st">"\nGradient computation:"</span>)
+classes = [<span class="st">"cat (true)"</span>, <span class="st">"dog"</span>, <span class="st">"car"</span>]
+<span class="kw">for</span> i, (c, p, g) <span class="kw">in</span> <span class="fn">enumerate</span>(<span class="fn">zip</span>(classes, probs, grad)):
+    direction = <span class="st">"push UP ↑"</span> <span class="kw">if</span> g < <span class="nm">0</span> <span class="kw">else</span> <span class="st">"push DOWN ↓"</span>
+    <span class="fn">print</span>(<span class="st">f"  {c:12s}: p={p:.3f}  grad={g:+.3f}  → {direction}"</span>)
+
+
+<span class="cm"># ─────────────────────────────────────────────────────────────
+# 6. KL DIVERGENCE
+# ─────────────────────────────────────────────────────────────</span>
+<span class="kw">def</span> <span class="fn">kl_divergence</span>(P, Q):
+    <span class="st">"""KL(P || Q). P = true dist, Q = model. Always >= 0."""</span>
+    P, Q = np.array(P), np.array(Q) + <span class="nm">1e-10</span>
+    <span class="kw">return</span> np.<span class="fn">sum</span>(P * np.<span class="fn">log</span>(P / Q))
+
+true_dist  = [<span class="nm">0.7</span>, <span class="nm">0.2</span>, <span class="nm">0.1</span>]
+close_pred = [<span class="nm">0.6</span>, <span class="nm">0.3</span>, <span class="nm">0.1</span>]  <span class="cm"># close to true</span>
+far_pred   = [<span class="nm">0.1</span>, <span class="nm">0.1</span>, <span class="nm">0.8</span>]  <span class="cm"># far from true</span>
+
+<span class="fn">print</span>(<span class="st">f"\nKL(true ‖ close): {<span class="fn">kl_divergence</span>(true_dist, close_pred):.4f}"</span>)
+<span class="fn">print</span>(<span class="st">f"KL(true ‖ far):   {<span class="fn">kl_divergence</span>(true_dist, far_pred):.4f}"</span>)
+
+
+<span class="cm"># ─────────────────────────────────────────────────────────────
+# 7. VERIFY WITH PYTORCH — our scratch results should match
+# ─────────────────────────────────────────────────────────────</span>
+logits_t = torch.tensor([[<span class="nm">1.2</span>, <span class="nm">0.5</span>, <span class="nm">0.1</span>]])
+target_t = torch.tensor([<span class="nm">0</span>])  <span class="cm"># cat = class 0</span>
+
+pt_loss = F.<span class="fn">cross_entropy</span>(logits_t, target_t)
+manual  = -np.<span class="fn">log</span>(<span class="fn">softmax</span>(np.array([<span class="nm">1.2</span>, <span class="nm">0.5</span>, <span class="nm">0.1</span>]))[<span class="nm">0</span>])
+
+<span class="fn">print</span>(<span class="st">f"\nManual loss:  {manual:.4f}"</span>)
+<span class="fn">print</span>(<span class="st">f"PyTorch loss: {pt_loss.item():.4f}"</span>)
+<span class="cm"># Should match exactly — confirming our understanding is correct</span></pre>
+  </div>
+</div>
+
+<hr class="div">
+
+<!-- BLOG SUMMARY -->
+<div class="sec" id="summary">
+  <div class="sec-lbl"><span class="sec-num">16</span><h2>Blog Post Summary</h2></div>
+  <div class="blog">
+    <div class="blog-hd">
+      <div class="blog-ico">📝</div>
+      <div>
+        <div class="blog-title">Why Log, Softmax & Likelihood — The Language of Every Loss Function</div>
+        <!-- <div class="blog-sub">Deep ML from Zero to Research · Post 2 of 28</div> -->
+      </div>
+    </div>
+    <ul>
+      <li><strong>Probability</strong> is between 0 and 1. A probability distribution over K classes sums to exactly 1. Models output raw logits — softmax converts them to probabilities.</li>
+      <li><strong>Likelihood</strong> asks: "How well does this model explain the observed data?" Probability holds θ fixed and varies data. Likelihood holds data fixed and varies θ. This single distinction is the foundation of all model training.</li>
+      <li><strong>The coin story</strong> makes this concrete: probability says "given θ=0.7, what sequence will I see?" Likelihood says "given I saw H,H,T,H, what θ best explains this?" MLE finds the θ with the highest likelihood.</li>
+      <li><strong>Log is used</strong> because: (1) it turns products into sums — critical for multiplying millions of probabilities together; (2) it prevents numerical underflow (0.9^million → zero); (3) −log(p) penalizes confident mistakes severely (p=0.01 → loss=4.6).</li>
+      <li><strong>Softmax</strong> converts logits to probabilities using eᶻⁱ/Σeᶻʲ. The exponential keeps outputs positive, preserves order, and amplifies differences making the model more decisive.</li>
+      <li><strong>Temperature τ</strong> scales logits before softmax. Low τ → sharp/confident. High τ → flat/random. This is the literal temperature knob in ChatGPT/Claude.</li>
+      <li><strong>Cross-entropy loss = NLL = MLE</strong>. ℒ = −log P(y_true|x). Only the true class matters; the summation Σᵢ yᵢ log pᵢ collapses to one term because yᵢ=0 for all wrong classes.</li>
+      <li><strong>KL divergence</strong> = H(P,Q) − H(P). Minimizing cross-entropy is equivalent to minimizing KL(true ‖ predicted). Appears in VAEs, PPO, DPO, and knowledge distillation.</li>
+      <li><strong>The gradient of softmax + cross-entropy = pₖ − yₖ</strong>. Prediction minus truth. Derived from quotient rule → chain rule → simplification. Correct class gets pushed up, wrong classes get pushed down — proportional to the error.</li>
+    </ul>
+  </div>
+</div>
+
+</div>
+
+</main>
+
+<script>
+function updateLog() {
+  const v = document.getElementById('p-slider').value / 100;
+  const loss = -Math.log(v);
+  document.getElementById('p-disp').textContent = v.toFixed(2);
+  document.getElementById('p-val').textContent = v.toFixed(2);
+  document.getElementById('log-val').textContent = loss.toFixed(3);
+
+  const noteP = v > 0.7 ? 'Very confident prediction' : v > 0.4 ? 'Moderately confident' : v > 0.1 ? 'Uncertain prediction' : 'Very uncertain — major error!';
+  const noteL = loss < 0.5 ? 'Tiny loss — good prediction ✓' : loss < 1.5 ? 'Moderate loss' : loss < 3 ? 'High loss — model was wrong' : 'Severe loss — confidently wrong!';
+  document.getElementById('p-note').textContent = noteP;
+  document.getElementById('log-note').textContent = noteL;
+  document.getElementById('log-val').style.color = loss < 0.5 ? 'var(--green)' : loss < 1.5 ? 'var(--amber)' : 'var(--red)';
+}
+
+// TOC highlight
+document.querySelectorAll('[id]').forEach(s => {
+  new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        document.querySelectorAll('.toc a').forEach(l => l.classList.remove('on'));
+        const a = document.querySelector(`.toc a[href="#${e.target.id}"]`);
+        if (a) a.classList.add('on');
+      }
+    });
+  }, { rootMargin: '-20% 0px -70% 0px' }).observe(s);
+});
+</script>
+</body>
+</html>
